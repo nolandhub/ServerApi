@@ -24,6 +24,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="zalo-platform-site-verification" content="Kzk64xJmKpfltS05gEXlMdt8xqQHlZaHCp4s" />
+        <meta property="og:title" content="Ứng dụng đặt vé PROBUS" />
+        <meta property="og:description" content="Đặt vé xe khách nhanh chóng, tiện lợi ngay trên Zalo." />
+        <meta property="og:image" content="https://i.ibb.co/99vZNzbX/logo-probus.webp" />
+        <meta http-equiv="Content-Security-Policy"
+          content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:" />
+        <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+        <meta name="theme-color" content="#007aff" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <title>ProbusVN Vé Xe Limousine</title>
+      </head>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
