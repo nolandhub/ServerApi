@@ -1,7 +1,6 @@
 
 //User INFO
 export type userInfo = {
-
     id: string,
     name: string,
     avatar: string,
@@ -11,6 +10,23 @@ export type userInfo = {
     createAt: string
 
 };
+
+export type PopRoute = {
+    title: string;
+    fromLabel: string;
+    toLabel: string;
+    fromTo: string;
+    image: string;
+    description: string;
+    price: number;
+    note: string;
+}
+
+
+
+
+
+
 
 
 

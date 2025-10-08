@@ -27,7 +27,9 @@ async function postHandler(req: Request) {
     }
 }
 
+
 export const POST = withCors(postHandler);
+
 export const OPTIONS = withCors(dummyOptions);
 
 

@@ -8,12 +8,14 @@ type Handler = (req: Request) => Promise<Response> | Response;
 export function withCors(handler: Handler) {
     return async (req: Request): Promise<Response> => {
 
+        //Never run in App-Router  . Only run on Page-Router
         if (req.method === "OPTIONS") {
             return new Response(null, {
                 status: 200,
                 headers: corsHeaders(),
             });
         }
+        /////////////////////////////////////////////////////
 
         const res = await handler(req);
 
@@ -25,6 +27,7 @@ export function withCors(handler: Handler) {
         return NextResponse.json(res, { headers: corsHeaders() });
     };
 }
+
 
 export const dummyOptions = () => new Response(null, { status: 200 });
 
