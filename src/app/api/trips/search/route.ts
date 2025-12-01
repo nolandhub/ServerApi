@@ -2,7 +2,9 @@
 import { NextResponse } from 'next/server';
 import { getTripsWithSales } from '@/services/tripServices';
 import { withCors } from "@/utils/withCors";
-export async function handlerGet(request: Request) {
+
+
+async function handlerGet(request: Request) {
     const url = new URL(request.url);
     const routeCode = url.searchParams.get('routeCode');
     const departDate = url.searchParams.get('departDate');
