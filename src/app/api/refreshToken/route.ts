@@ -3,7 +3,6 @@ import axios from "axios";
 import formatErr from "@/helper/formatErr";
 
 export async function POST(req: Request) {
-
     try {
         const { refresh_token } = await req.json();
 

@@ -28,9 +28,7 @@ export function withCors(handler: Handler) {
     };
 }
 
-
 export const dummyOptions = () => new Response(null, { status: 200 });
-
 
 function corsHeaders() {
     return new Headers({
