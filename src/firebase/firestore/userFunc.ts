@@ -6,16 +6,16 @@ import {
     getDocs,
     updateDoc,
     collection,
+    Timestamp,
 } from "firebase/firestore";
 
-import { userInfo } from "@/typeOf/Firestore_Type";
+import { CoreData, User } from "@/typeOf/Firestore_Type";
 
 const USER_COLLECTION = "users";
 
-export async function addUser(id: string, data: userInfo) {
-    const userId = id;
-    const ref = doc(db, USER_COLLECTION, userId);
-    await setDoc(ref, data, { merge: true }); // an toàn khi cập nhật
+export async function addUser(id: string, data: CoreData) {
+    const ref = doc(db, USER_COLLECTION, id);
+    await setDoc(ref, data, { merge: true });
 }
 
 export async function getUserById(id: string) {
@@ -27,12 +27,13 @@ export async function getUserById(id: string) {
 export async function getAllUsers() {
     const ref = collection(db, USER_COLLECTION);
     const snap = await getDocs(ref);
-    return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return snap.docs.map(doc => ({
+        id: doc.id,
+        ...(doc.data() as Omit<User, "id">),
+    }));
 }
 
-export async function updateUser(id: string, data: Partial<userInfo>) {
+export async function updateUser(id: string, data: Partial<CoreData>) {
     const ref = doc(db, USER_COLLECTION, id);
     await updateDoc(ref, data);
 }
-
-

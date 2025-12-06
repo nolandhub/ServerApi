@@ -1,6 +1,7 @@
 "use client"
 
-import { type Icon } from "@tabler/icons-react"
+import { type Icon as TablerIcon } from "@tabler/icons-react"
+import { type LucideIcon } from 'lucide-react';
 import { redirect } from "next/navigation"
 import {
   SidebarGroup,
@@ -9,6 +10,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export function NavMain({
   items,
@@ -16,7 +23,7 @@ export function NavMain({
   items: {
     title: string
     url: string
-    icon?: Icon
+    icon?: TablerIcon | LucideIcon
   }[]
 }) {
   return (
@@ -25,6 +32,7 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
+
               <SidebarMenuButton onClick={() => redirect(`/dashboard/${item.url}`)} tooltip={item.title}>
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>

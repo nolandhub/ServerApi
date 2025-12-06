@@ -15,7 +15,6 @@ async function handlerGet(request: Request) {
     try {
         const res = await getTripsWithSales(routeCode, departDate)
         return NextResponse.json(res, { status: 200 });
-
     } catch (error: any) {
         console.error('Database query error:', error);
         return NextResponse.json({ error: 'Failed to fetch data', details: error.message }, { status: 500 });

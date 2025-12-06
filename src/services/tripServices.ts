@@ -1,6 +1,6 @@
 // services/tripService.ts
-import { pool } from '@/lib/db';
-import { PriceByTime, SaleDetail, Trip, TripWithSale } from '@/typeOf/tripType';
+import { pool } from '@/app/db';
+import { PriceByTime, SaleDetail, Trip, TripWithSale } from '@/typeOf/rawType';
 import { rawPrices, rawSaleConfig } from '@/typeOf/rawType';
 import { RowDataPacket } from 'mysql2/promise';
 

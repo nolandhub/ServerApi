@@ -62,7 +62,6 @@ export default function RootLayout({
             </NuqsAdapter>
           </LayoutProvider>
         </ThemeProvider>
-
       </body>
     </html>
   );

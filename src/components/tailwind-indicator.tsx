@@ -1,3 +1,4 @@
+"use client"
 const SHOW = true
 
 export function TailwindIndicator() {

@@ -2,22 +2,21 @@
 
 import * as React from "react"
 import {
-  IconCamera,
   IconRoute,
   IconDashboard,
   IconDatabase,
-  IconFileAi,
-  IconFileDescription,
   IconFileWord,
-  IconFolder,
   IconHelp,
   IconInnerShadowTop,
   IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
-  IconUsers,
+  IconBus,
+  IconRoad,
+  IconStar
 } from "@tabler/icons-react"
+
 
 import {
   Sidebar,
@@ -46,46 +45,46 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Booking",
-      url: "#",
+      title: "Danh sách vé",
+      url: "/ticket",
       icon: IconListDetails,
     },
     {
-      title: "Trip",
-      url: "#",
-      icon: IconRoute,
+      title: "Các chuyến hiện tại",
+      url: "/trip",
+      icon: IconRoad
     },
     {
-      title: "Route",
-      url: "#",
-      icon: IconFolder,
+      title: "Tuyến đường",
+      url: "/route",
+      icon: IconRoute
     },
     {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Nhà xe",
+      url: "/bus",
+      icon: IconBus
     },
     {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Cấu hình sale",
+      url: "/saleconfig",
+      icon: IconStar
     }
   ],
   navSecondary: [
     {
       title: "Settings",
       url: "#",
-      icon: IconSettings,
+      icon: IconSettings
     },
     {
       title: "Get Help",
       url: "#",
-      icon: IconHelp,
+      icon: IconHelp
     },
     {
       title: "Search",
       url: "#",
-      icon: IconSearch,
+      icon: IconSearch
     },
   ],
   documents: [
@@ -119,7 +118,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="/">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Probus</span>
+                <span className="text-base font-semibold">Probus Vé Xe Limousine</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -127,7 +126,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        {/* <NavDocuments items={data.documents} /> */}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

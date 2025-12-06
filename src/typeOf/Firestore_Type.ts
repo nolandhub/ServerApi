@@ -1,218 +1,102 @@
-
+"use client"
+import { Timestamp } from "firebase/firestore"
+import { basePickDrop } from "./rawType"
 //User INFO
-export type userInfo = {
-    id: string,
-    name: string,
-    avatar: string,
-    role: string,
+export interface CoreData {
+    name: string
+    avatar: string
+    phone: string
+    role: string
     totalSpending: number
-    phone?: string,
-    createAt: string
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export type BookingFormData = {
-    fullName: string;
-    phone: string;
-    from: string;
-    to: string;
-    passengerCount: number;
-}
-export type suggestionsTrip = {
-    label: string;
-    value: string;
+    createAt: Timestamp
 }
 
-
-//Company
-
-export type busCompany = {
-    id: string,
-    companyName: string,
-    logo: string,
-    description: string,
-}
-
-//Trip
-
-export type trip = {
+export interface User extends CoreData {
     id: string
-    companyId: string // id Company
-    routeId: string
-
-    pickDetails: {
-        time: string
-        pickUpAddress: string
-        description: string
-    }[];
-
-    dropDetails: {
-        time: string
-        dropOffAddress: string
-        description: string
-    }[];
-
 }
 
-
-//Route
-// export type route = {
-//     id: string, // chuẩn format (vd: saigon-nhatrang <=> Sài Gòn - Nha Trang) 
-//     from: string,
-//     to: string
-// }
-
-//Price
-export type pricingPolicy = {
-    companyId: string //id company
-    companyName: string
-    routeId: string
-    typeBus: string
-    pricingType: "fixed" | "bySeat" | "byRoom"; // đồng giá / theo ghế / theo phòng
-    pricingDetails: {
-        label: string;    // Ví dụ: "Phòng Đơn 1 Khách"
-        price: number;    // 450000
-    }[];
-    departureTime: string;
-    note?: string;
+// Dữ liệu cá nhân chỉ lưu ở local
+export type UserCached = CoreData & {
+    gender?: string
+    dob?: string
+    address?: string
+    favorite?: string
 }
 
-
-
-export type roadmap = {
-    routeId: string,
-    companyId: string,
-    roadPoints: string[]
+export interface Option {
+    time: string;           // "08:00 - 10:00"
+    label: string;          // "Phòng VIP"
+    value: number;          // 600000
+    quantity: number;       // 2
+    subtotal: number;       // 1200000
 }
 
-export type transfer = {
-    companyId: string,
-    locations: {
-        [key: string]: {
-            label: string,
-            description: string
-        }
-    }
-}
-
-
-export type booking = {
-    zaloId: string;             // ID người dùng Zalo
-    zaloName: string;           // Tên người dùng Zalo
-
-    companyId: string
-    companyName: string
-    typeBus: string
-    routeId: string;            // ID tuyến, ví dụ: 'hanoi-sapa-01'
-    fromTo: string;
-
-    nameBooking: string;        // Họ tên người đặt
-    phoneBooking: string;       // SĐT người đặt
-    numBooking: number;         // Số lượng hành khách (nên dùng number, không nên string)
-
-
-    dateBooking: Date | undefined | string;        // Ngày đi, định dạng ISO: '2025-08-01'
-
-    timePickBooking: Date | undefined | string;        // Giờ khởi hành, ví dụ: '07:30' hoặc '2025-08-01T07:30'
-    timeDropBooking: Date | undefined | string;
-
-    pickUpAddress: string
-    dropOffAddress: string
-
-    isReturn: boolean                             // khứ hồi mặc định false
-    dateReturn: Date | undefined | string
-
-    pickUpAddressReturn: string
-    dropOffAddressReturn: string
-
-    createdAt: Date;         // (Tùy chọn) Ngày giờ tạo - dùng khi cần thống kê
-    isDeleted: boolean
-};
-
-
-
-
-export type ticket = {
-    id: string
+export interface BookingData {
+    bookingId: string
     zaloId: string
-    zaloName: string
 
-    companyName: string,
+    compId: string
+    compName: string
+    busName: string
+    tripId: number
+    routeName: string
 
-    fromTo: string,
+    bookingDate: string
 
-    dateBooking: Date | string | undefined,
+    //Scale --> future
+    // isReturn: boolean
+    // returnDate?: Date | null
 
+    bookingName: string
+    bookingPhone: string
 
-    isReturn: boolean                             // khứ hồi mặc định false
-    dateReturn: Date | undefined | string
-    dropOffAddressReturn: string
-    pickUpAddressReturn: string
-    status: "unused" | "used" | "canceled",
+    option: Option[]
+    total: number   //total price
+    totalPassCount: number  //total quantities of passenger
 
-    //detailsTicket
-    nameBooking: string,
-    phoneBooking: string,
-    seatName: string[],                   //A3
-    totalPrice: number,                  //500000
-    numBooking: number                 //2 people
-    busNumber: string                //79A-2239.31
+    pickUp: basePickDrop | null            //Time here - PickUp
+    dropOff: basePickDrop | null       //Time here - DropOff
 
-    timePickBooking: Date | undefined | string,
-    timeDropBooking: Date | undefined | string,
+    pickUpNote: string | ""
+    dropOffNote: string | ""
 
-    pickUpAddress: string
-    dropOffAddress: string
+    createAt?: string
+    updateAt?: Timestamp
 
-
-
-    //Hide/Show details
-    adminConfirm: boolean
-
-    createdAt: Date;
+    isDelete: boolean
 }
+
+export type TicketStatus = "pending" | "confirmed" | "used" | "cancelled"
+
+export interface Ticket extends BookingData {
+    id: string
+    busNumber: string
+    seatName: string
+    status: TicketStatus
+    cancelReason: string
+    createUser: string
+    updateUser?: string
+}
+
+
+export interface Policies {
+    title: string
+    description: string[]
+}
+
+export interface BusCompanyData {
+    compId: string
+    compName: string
+    avatar: string
+    imagesInterior: string[]
+    policies: Policies[]
+    updateAt?: Date
+}
+
+export interface BusCompany extends BusCompanyData {
+    id: string
+}
+
 
 
 export type token = {
