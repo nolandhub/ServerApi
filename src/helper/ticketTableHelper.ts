@@ -1,5 +1,6 @@
+import { tickSchema } from "@/config/datafield/ticketSchema";
 import { z } from "zod";
-import { tickSchema } from "@/app/config/datafield/ticketSchema";
+
 
 export type Ticket = z.infer<typeof tickSchema>;
 

@@ -11,7 +11,7 @@ import { IconCircleCheckFilled, IconClock, IconDotsVertical, IconLoader } from "
 import { ColumnDef } from "@tanstack/react-table";
 import { toast } from "sonner";
 import z from "zod";
-import { DragHandle } from "@/components/dashboard/data-table";
+import { DragHandle } from "@/components/dashboard/data-tables-advance";
 
 import { schema } from "../datafield/testSchema";
 

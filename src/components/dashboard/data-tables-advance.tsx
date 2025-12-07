@@ -56,7 +56,7 @@ interface DataTableProps {
   data: any[]
 }
 
-export function DataTable({ data: initialData }: DataTableProps) {
+export function DataTableAdvance({ data: initialData }: DataTableProps) {
   // State management
   const [activeTab, setActiveTab] = React.useState<string>("booking")
   const [data, setData] = React.useState<any[]>(initialData)
@@ -96,7 +96,6 @@ export function DataTable({ data: initialData }: DataTableProps) {
 
     try {
       setColumnsState(tab.columns as ColumnDef<any>[])
-
       if (tabId === "booking") {
         const sortedData = sortByLocalStorageOrder(initialData, tabId)
         setData(sortedData)
@@ -114,8 +113,6 @@ export function DataTable({ data: initialData }: DataTableProps) {
       toast.error("Failed to load data for tab.")
     }
   }
-
-  // Filter data based on search and status - only for booking tab
 
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(

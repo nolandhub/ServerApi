@@ -14,7 +14,7 @@ import z from "zod";
 import dayjs from "dayjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { decodeWeekdays } from "@/helper/decodeBitWise";
-import { DragHandle } from "@/components/dashboard/data-table";
+import { DragHandle } from "@/components/dashboard/data-tables-advance";
 import {
     getPickUpLocation,
     getDropOffLocation,

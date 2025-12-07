@@ -14,7 +14,9 @@ import {
   IconSettings,
   IconBus,
   IconRoad,
-  IconStar
+  IconStar,
+  IconCube,
+  IconPigMoney
 } from "@tabler/icons-react"
 
 
@@ -27,10 +29,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { NavDocuments } from "@/components/dashboard/nav-documents"
 import { NavMain } from "@/components/dashboard/nav-main"
 import { NavSecondary } from "@/components/dashboard/nav-secondary"
 import { NavUser } from "@/components/dashboard/nav-user"
+import { NavDropdown } from "./nav-dropdown"
+import { Clock } from "lucide-react"
+
 
 const data = {
   user: {
@@ -40,34 +44,9 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
+      title: "Overview",
       url: "#",
       icon: IconDashboard,
-    },
-    {
-      title: "Danh sách vé",
-      url: "/ticket",
-      icon: IconListDetails,
-    },
-    {
-      title: "Các chuyến hiện tại",
-      url: "/trip",
-      icon: IconRoad
-    },
-    {
-      title: "Tuyến đường",
-      url: "/route",
-      icon: IconRoute
-    },
-    {
-      title: "Nhà xe",
-      url: "/bus",
-      icon: IconBus
-    },
-    {
-      title: "Cấu hình sale",
-      url: "/saleconfig",
-      icon: IconStar
     }
   ],
   navSecondary: [
@@ -77,33 +56,28 @@ const data = {
       icon: IconSettings
     },
     {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp
-    },
-    {
       title: "Search",
       url: "#",
       icon: IconSearch
     },
   ],
-  documents: [
+  navTrip: [
     {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
+      title: "Thông tin chuyến",
+      icon: IconRoad,
+      url: "trip"
     },
     {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
+      title: "Thời gian khởi hành",
+      icon: Clock,
+      url: "triptime"
     },
     {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
+      title: "Giá tiền theo khung giờ",
+      icon: IconPigMoney,
+      url: "baseprice"
     },
-  ],
+  ]
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -126,7 +100,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavDocuments items={data.documents} /> */}
+        <NavDropdown icon={IconCube} title="Quản lý chuyến" items={data.navTrip} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

@@ -8,7 +8,7 @@ import { IconClock, IconDotsVertical } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import z from "zod";
 import dayjs from "dayjs";
-import { DragHandle } from "@/components/dashboard/data-table";
+import { DragHandle } from "@/components/dashboard/data-tables-advance";
 import { getFirstOptionTime } from "@/helper/ticketTableHelper";
 import { tickSchema } from "../datafield/ticketSchema";
 import PopoverDetailBooking from "@/components/dashboard/popup-detail";

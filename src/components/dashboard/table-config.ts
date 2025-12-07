@@ -3,9 +3,9 @@
  * Dễ dàng mở rộng thêm tab mới
  */
 
+import { saleConfigColumns } from "@/config/columns/saleConfigColumns"
+import { ticketColumns } from "@/config/columns/ticketColumns"
 import { ColumnDef } from "@tanstack/react-table"
-import { ticketColumns } from "@/app/config/columns/ticketColumns"
-import { saleConfigColumns } from "@/app/config/columns/saleConfigColumns"
 
 export interface TableTab {
     id: string

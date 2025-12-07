@@ -32,7 +32,6 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-
               <SidebarMenuButton onClick={() => redirect(`/dashboard/${item.url}`)} tooltip={item.title}>
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>

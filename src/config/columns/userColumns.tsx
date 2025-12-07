@@ -8,7 +8,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import z from "zod";
 import dayjs from "dayjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DragHandle } from "@/components/dashboard/data-table";
+import { DragHandle } from "@/components/dashboard/data-tables-advance";
 
 import { userScheme } from "../datafield/userSchema";
 

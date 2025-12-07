@@ -38,7 +38,6 @@ import { Option } from '@/typeOf/Firestore_Type';
 import { mergeTicket } from '@/firebase/firestore/ticketFunc';
 import { Ticket } from '@/helper/ticketTableHelper';
 import { Calendar22 } from '../common/date-picker';
-import dayjs from 'dayjs';
 
 
 const TICKET_STATUS = [
@@ -118,7 +117,7 @@ export function ViewEditTicket({ item }: { item: Ticket }) {
         field: K,
         value: Option[K]
     ) => {
-        setFormData(prev => {
+        setFormData((prev) => {
             if (!prev.option) return prev;
             if (!prev.option[index]) return prev;
 
