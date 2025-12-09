@@ -1,8 +1,11 @@
 // services/tripService.ts
 import { pool } from '@/app/db';
-import { PriceByTime, SaleDetail, Trip, TripWithSale } from '@/typeOf/rawType';
-import { rawPrices, rawSaleConfig } from '@/typeOf/rawType';
+import { PriceByTime, SaleDetail, Trip, TripWithSale } from '@/types/rawType';
+import { rawPrices, rawSaleConfig } from '@/types/rawType';
 import { RowDataPacket } from 'mysql2/promise';
+import { getPrices } from './priceService';
+import { getSales } from './saleService';
+
 
 // ============================================================================
 // DATABASE QUERIES
@@ -16,23 +19,27 @@ export async function getTrips(routeCode: string): Promise<Trip[]> {
     return result?.[0] as Trip[] || [];
 }
 
-export async function getPrices(routeCode: string, departDate: string): Promise<rawPrices[]> {
-    const [result] = await pool.execute<RowDataPacket[]>(
-        'CALL proc_price_get_by_route_date(?, ?)',
-        [routeCode, departDate]
-    );
 
-    return (result?.[0] as rawPrices[]) || [];
-}
 
-export async function getSales(routeCode: string, departDate: string): Promise<rawSaleConfig[]> {
-    const [result] = await pool.execute<RowDataPacket[]>(
-        'CALL proc_sales_get_by_route_date(?, ?)',
-        [routeCode, departDate]
-    );
 
-    return (result?.[0] as rawSaleConfig[]) || [];
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ============================================================================
 // TRANSFORMATION
@@ -165,7 +172,7 @@ function buildPriceMapWithSale(
             saleConfigs
         );
 
-        //Sort Best Sale Follow Level Sale ( Trip(3)->Route(2)->SysTem(1) )
+        //Sort Best Sale Follow Level Sale ( Trip(3)->Route(2)->SysTem(1))
         const currentSale = saleSnapshotMap[item.tripId]
 
         if (!currentSale && applicableSale) {
@@ -241,6 +248,11 @@ export function mergeTripData(
         saleSnapShot: saleSnapshotMap[trip.tripId] || null
     }));
 }
+
+
+
+
+
 
 // ============================================================================
 // One For All

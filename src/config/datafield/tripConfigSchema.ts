@@ -16,3 +16,4 @@ export const tripSchema = z.object({
     createAt: z.string(),
     isActive: z.number()
 })
+

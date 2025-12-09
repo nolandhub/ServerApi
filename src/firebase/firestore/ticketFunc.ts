@@ -1,6 +1,6 @@
-import { TicketUpdate } from "@/components/dashboard/view-edit";
+import { TicketUpdate } from "@/components/dashboard/ticket-draw-edit";
 import { db } from "@/firebase/fireConfig";
-import { Ticket } from "@/typeOf/Firestore_Type";
+import { Ticket } from "@/types/Firestore_Type";
 import {
     doc,
     setDoc,

@@ -14,15 +14,19 @@ import {
 } from "@/components/ui/popover"
 
 type Calendar22Props = {
-    date?: Date
+    label?: string
+    date: Date | undefined
     onSelect: (date: Date | undefined) => void
 }
 
-export function Calendar22({ date, onSelect }: Calendar22Props) {
+export function Calendar22({ label, date, onSelect }: Calendar22Props) {
     const [open, setOpen] = React.useState(false)
 
     return (
         <div className="flex flex-col gap-2">
+            <Label htmlFor="date" className="px-1">
+                {label}
+            </Label>
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button
@@ -42,10 +46,9 @@ export function Calendar22({ date, onSelect }: Calendar22Props) {
                     <Calendar
                         mode="single"
                         selected={date}
-                        captionLayout="dropdown"
-                        onSelect={(d) => {
+                        onSelect={(date) => {
                             setOpen(false)
-                            onSelect(d)
+                            onSelect(date)
                         }}
                     />
                 </PopoverContent>

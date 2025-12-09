@@ -33,7 +33,7 @@ import { NavMain } from "@/components/dashboard/nav-main"
 import { NavSecondary } from "@/components/dashboard/nav-secondary"
 import { NavUser } from "@/components/dashboard/nav-user"
 import { NavDropdown } from "./nav-dropdown"
-import { Clock } from "lucide-react"
+import { CalendarClock, Clock } from "lucide-react"
 
 
 const data = {
@@ -47,6 +47,11 @@ const data = {
       title: "Overview",
       url: "#",
       icon: IconDashboard,
+    },
+    {
+      title: "Chi tiết lịch trình",
+      url: "detailtrip",
+      icon: CalendarClock,
     }
   ],
   navSecondary: [

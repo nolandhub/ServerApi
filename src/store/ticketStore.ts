@@ -1,5 +1,8 @@
-import { Ticket } from "@/typeOf/Firestore_Type";
+import { Ticket } from "@/types/Firestore_Type";
 import { create } from "zustand";
+
+
+
 
 interface TicketStore {
     tickets: Ticket[]

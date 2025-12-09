@@ -1,4 +1,4 @@
-import { User } from "@/typeOf/Firestore_Type";
+import { User } from "@/types/Firestore_Type";
 import { create } from "zustand"
 
 interface UserStore {

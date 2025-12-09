@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const [res] = await pool.execute<RowDataPacket[]>(`call proc_trip_get(?)`, [-1])
+        const [res] = await pool.execute<RowDataPacket[]>(`Call proc_sale_configs_getall(?)`, [-1])
         return NextResponse.json(res?.[0] || [], { status: 200 })
     } catch (error: unknown) {
         const message =
@@ -12,4 +12,3 @@ export async function GET() {
         return NextResponse.json({ error: message }, { status: 500 });
     }
 }
-

@@ -9,7 +9,7 @@ import {
     Timestamp,
 } from "firebase/firestore";
 
-import { CoreData, User } from "@/typeOf/Firestore_Type";
+import { CoreData, User } from "@/types/Firestore_Type";
 
 const USER_COLLECTION = "users";
 

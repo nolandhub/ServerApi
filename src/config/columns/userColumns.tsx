@@ -8,16 +8,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import z from "zod";
 import dayjs from "dayjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DragHandle } from "@/components/dashboard/data-tables-advance";
 
 import { userScheme } from "../datafield/userSchema";
 
 export const userColumns: ColumnDef<z.infer<typeof userScheme>>[] = [
-    {
-        id: "drag",
-        header: () => null,
-        cell: ({ row }) => <DragHandle id={row.original.id} />,
-    },
     {
         id: "select",
         header: ({ table }) => {

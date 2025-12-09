@@ -1,37 +1,31 @@
 
 "use client"
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Checkbox } from "@/components/ui/checkbox";
-import { IconClock, IconDotsVertical } from "@tabler/icons-react";
+import { IconClock } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import z from "zod";
 import dayjs from "dayjs";
-import { DragHandle } from "@/components/dashboard/data-tables-advance";
 import { getFirstOptionTime } from "@/helper/ticketTableHelper";
 import { tickSchema } from "../datafield/ticketSchema";
 import PopoverDetailBooking from "@/components/dashboard/popup-detail";
-import { cn } from "@/lib/utils";
 import { CalendarDaysIcon } from "lucide-react";
-import { ViewEditTicket } from "@/components/dashboard/view-edit";
+import { TicketQuickEditDrawer } from "@/components/dashboard/ticket-draw-edit";
 
 
 export const ticketColumns: ColumnDef<z.infer<typeof tickSchema>>[] = [
-    {
-        id: "drag",
-        header: () => null,
-        cell: ({ row }) => <DragHandle id={row.original.id} />,
-    },
     {
         accessorKey: "id",
         header: "Id",
     },
     {
+        accessorKey: "routeName",
+        header: "Tuyến đường",
+    },
+    {
         accessorKey: "bookingName",
         header: "Khách Hàng",
         cell: ({ row }) => (
-            <ViewEditTicket item={row.original} />
+            <TicketQuickEditDrawer item={row.original} />
         )
     },
     {
@@ -48,19 +42,6 @@ export const ticketColumns: ColumnDef<z.infer<typeof tickSchema>>[] = [
         ),
     },
     {
-        accessorKey: "routeName",
-        header: "Tuyến đường",
-    },
-    {
-        accessorKey: "bookingDate",
-        header: () => <div className="text-center">Ngày đi</div>,
-        cell: ({ row }) =>
-            <div className="flex gap-1 items-center justify-center">
-                <CalendarDaysIcon size={16} />
-                {dayjs(row.original.bookingDate).format("DD-MM-YYYY")}
-            </div>
-    },
-    {
         id: "optionTime",
         header: () => <div className="text-center">Giờ khởi hành</div>,
         cell: ({ row }) => (
@@ -69,6 +50,29 @@ export const ticketColumns: ColumnDef<z.infer<typeof tickSchema>>[] = [
                 {getFirstOptionTime(row.original)}
             </div>
         ),
+    },
+    {
+        id: "createAt",
+        accessorFn: row =>
+            row.createAt ? new Date(row.createAt).getTime() : null,
+        header: "Ngày đặt",
+        cell: ({ getValue }) => {
+            const value = getValue<number | null>()
+            return value
+                ? new Date(value).toLocaleString("vi-VN")
+                : "-"
+        },
+        sortingFn: "basic",
+        filterFn: "dateRange"
+    },
+    {
+        accessorKey: "bookingDate",
+        header: () => <div className="text-center">Ngày đi</div>,
+        cell: ({ row }) =>
+            <div className="flex gap-1 items-center">
+                <CalendarDaysIcon size={16} />
+                {dayjs(row.original.bookingDate).format("DD-MM-YYYY")}
+            </div>
     },
     {
         accessorKey: "status",
@@ -90,14 +94,5 @@ export const ticketColumns: ColumnDef<z.infer<typeof tickSchema>>[] = [
                 </div>
             );
         },
-    },
-    {
-        accessorKey: "createAt",
-        header: () => <div className="text-center">Ngày tạo</div>,
-        cell: ({ row }) => (
-            <div className="text-sm">
-                {row.original.createAt ? dayjs(row.original.createAt).format("DD-MM-YYYY HH:mm") : "-"}
-            </div>
-        ),
     }
 ]

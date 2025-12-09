@@ -5,12 +5,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Checkbox } from "@/components/ui/checkbox";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
-import z from "zod";
+import z, { keyof } from "zod";
 import { tripSchema } from "../datafield/tripConfigSchema";
 import { Badge } from "@/components/ui/badge";
 import { table } from "console";
 import { CirclePlus } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useTripStore } from "@/store/tripStore";
 
 
 export const tripColumns: ColumnDef<z.infer<typeof tripSchema>>[] = [
@@ -57,8 +58,31 @@ export const tripColumns: ColumnDef<z.infer<typeof tripSchema>>[] = [
         header: "Tên xe"
     },
     {
-        accessorKey: "transferTypeName",
-        header: "Trung chuyển"
+        accessorKey: "transferTypeId",
+        header: "Chiều trung chuyển",
+        cell: ({ row }) => {
+            const TRANSFER_MAP: Record<number, {
+                label: string
+                color: string
+            }> = {
+                1: { label: "Chiều đi", color: "bg-blue-500" },
+                2: { label: "Chiều đến", color: "bg-yellow-500" },
+                3: { label: "2 Chiều", color: "bg-red-500" },
+            }
+
+            const select = TRANSFER_MAP[row.original.transferTypeId]
+
+            if (!select) {
+                return <Badge className="bg-gray-500">Chưa chọn</Badge>
+            }
+            return (
+                <Badge className={`${select.color}`}>
+                    {select.label}
+                </Badge>
+            )
+
+        }
+
     },
     {
         accessorKey: "priceTypeName",
@@ -78,38 +102,57 @@ export const tripColumns: ColumnDef<z.infer<typeof tripSchema>>[] = [
     },
     {
         id: "actions",
-        cell: () => (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="ghost"
-                        className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-                        size="icon"
-                    >
-                        <IconDotsVertical />
-                        <span className="sr-only">Open menu</span>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-32">
-                    <DropdownMenuItem>Chỉnh sửa</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive">Xóa</DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-        ),
+        cell: ({ row }) => {
+            // debug: in ra console để xem shape của row
+            console.log("DEBUG row.id, row.original:", row.id, row.original);
+
+            const trip = row.original;
+            if (!trip) {
+                // nếu vẫn crash ở đây, log sẽ cho biết vì sao
+                return null;
+            }
+
+            const { openEditSheet, openConfirmDelete } = useTripStore.getState();
+
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">...</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-32">
+                        <DropdownMenuItem onClick={() => openEditSheet(trip)}>Chỉnh sửa</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                            onClick={() => {
+                                console.log("DEBUG delete id:", trip.id);
+                                openConfirmDelete(trip.id);
+                            }}
+                            variant="destructive"
+                        >
+                            Xóa
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            );
+        }
     },
     {
         id: "add",
-        header: () =>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button className="h-6 w-6" variant="outline" size="icon">
-                        <CirclePlus />
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>Thêm chuyến</p>
-                </TooltipContent>
-            </Tooltip>
+        header: () => {
+            const { openEditSheet } = useTripStore.getState()
+            return (
+                <Tooltip >
+                    <TooltipTrigger onClick={() => openEditSheet()} asChild>
+                        <Button className="h-7 w-7" variant="outline" size="icon">
+                            <CirclePlus />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Thêm chuyến</p>
+                    </TooltipContent>
+                </Tooltip >
+            )
+        }
+
     }
 ]

@@ -3,37 +3,16 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { IconArrowsSort, IconBus, IconCircleCheckFilled, IconClock, IconDotsVertical, IconEye, IconLoader, IconMapPin } from "@tabler/icons-react";
+import { IconDotsVertical } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { toast } from "sonner";
 import z from "zod";
 import dayjs from "dayjs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { decodeWeekdays } from "@/helper/decodeBitWise";
-import { DragHandle } from "@/components/dashboard/data-tables-advance";
-import {
-    getPickUpLocation,
-    getDropOffLocation,
-    getFirstOptionTime,
-    getSeatNames,
-    getTotalSeats,
-
-} from "@/helper/ticketTableHelper";
-import PopoverZoomInDemo from "@/components/dashboard/popup-detail";
 import { saleConfigSchema } from "../datafield/saleConfigSchema";
 
 
-
 export const saleConfigColumns: ColumnDef<z.infer<typeof saleConfigSchema>>[] = [
-    {
-        id: "drag",
-        header: () => null,
-        cell: ({ row }) => <DragHandle id={row.original.id} />,
-    },
     {
         id: "select",
         header: ({ table }) => (

@@ -1,31 +1,17 @@
 "use client"
-import { DataTableAdvance } from "@/components/dashboard/data-tables-advance"
-import { useEffect } from "react"
+import { TableTabs } from "@/components/dashboard/data-tables-tabs"
 import { SectionCards } from "@/components/dashboard/section-cards"
 import { ChartAreaInteractive } from "@/components/dashboard/chart-area-interactive"
-import { useTicketStore } from "@/store/ticketStore"
-import { getAllTicket, listenTickets } from "@/firebase/firestore/ticketFunc"
 import { Separator } from "@/components/ui/separator"
 
 
 export default function Page() {
-    const setTickets = useTicketStore((select) => select.setTickets)
-    const tickets = useTicketStore((select) => select.tickets)
-
-
-    useEffect(() => {
-        const unsubscribe = listenTickets((data) => {
-            setTickets(data)
-        })
-        return () => {
-            unsubscribe()
-        }
-    }, [])
-
     return (
         <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                <DataTableAdvance data={tickets} />
+                <div className="p-6">
+                    <TableTabs />
+                </div>
                 <Separator className="my-6" />
                 <SectionCards />
                 <div className="px-4 lg:px-6">

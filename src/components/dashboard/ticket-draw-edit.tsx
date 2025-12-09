@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -34,7 +34,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-import { Option } from '@/typeOf/Firestore_Type';
+import { Option } from '@/types/Firestore_Type';
 import { mergeTicket } from '@/firebase/firestore/ticketFunc';
 import { Ticket } from '@/helper/ticketTableHelper';
 import { Calendar22 } from '../common/date-picker';
@@ -63,11 +63,17 @@ export type TicketUpdate = Pick<
     | 'status'
 >;
 
-export function ViewEditTicket({ item }: { item: Ticket }) {
+export function TicketQuickEditDrawer({ item }: { item: Ticket }) {
     const isMobile = useIsMobile();
     const [open, setOpen] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [formData, setFormData] = useState<Ticket>(item);
+
+    useEffect(() => {
+        if (open) {
+            setFormData(item)
+        }
+    }, [open, item])
 
     const handleSubmit = async () => {
         if (!formData.id) return;

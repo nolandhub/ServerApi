@@ -15,13 +15,6 @@ export interface User extends CoreData {
     id: string
 }
 
-// Dữ liệu cá nhân chỉ lưu ở local
-export type UserCached = CoreData & {
-    gender?: string
-    dob?: string
-    address?: string
-    favorite?: string
-}
 
 export interface Option {
     time: string;           // "08:00 - 10:00"
