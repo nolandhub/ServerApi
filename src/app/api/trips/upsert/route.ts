@@ -35,7 +35,7 @@ export async function POST(req: Request) {
             ]
         )
 
-        const trip = rows?.[0]?.[0]
+        const trip = rows?.[0]
 
         return NextResponse.json({
             success: true,

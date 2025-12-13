@@ -1,14 +1,16 @@
 
 "use client"
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+    DropdownMenu, DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator, DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
-import { IconDotsVertical } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
-import z, { keyof } from "zod";
+import z from "zod";
 import { tripSchema } from "../datafield/tripConfigSchema";
 import { Badge } from "@/components/ui/badge";
-import { table } from "console";
 import { CirclePlus } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTripStore } from "@/store/tripStore";
@@ -80,9 +82,7 @@ export const tripColumns: ColumnDef<z.infer<typeof tripSchema>>[] = [
                     {select.label}
                 </Badge>
             )
-
         }
-
     },
     {
         accessorKey: "priceTypeName",
@@ -103,12 +103,8 @@ export const tripColumns: ColumnDef<z.infer<typeof tripSchema>>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            // debug: in ra console để xem shape của row
-            console.log("DEBUG row.id, row.original:", row.id, row.original);
-
             const trip = row.original;
             if (!trip) {
-                // nếu vẫn crash ở đây, log sẽ cho biết vì sao
                 return null;
             }
 
@@ -124,7 +120,6 @@ export const tripColumns: ColumnDef<z.infer<typeof tripSchema>>[] = [
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             onClick={() => {
-                                console.log("DEBUG delete id:", trip.id);
                                 openConfirmDelete(trip.id);
                             }}
                             variant="destructive"

@@ -12,12 +12,12 @@ import {
     SheetTitle
 } from '@/components/ui/sheet'
 import { Trip, useTripStore } from '@/store/tripStore'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../../ui/select'
 import { getDropdownData } from '@/helper/apiFuncHelper'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import axios from 'axios'
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog'
 
 interface SheetProps {
     openSheet: boolean;

@@ -1,6 +1,6 @@
 "use client"
 
-import TripTable from "@/components/table/trip/table-trip"
+import TripTable from "@/components/table/table-trip/table-trip"
 import { useTripStore } from "@/store/tripStore"
 import axios from "axios"
 import { useEffect, useState } from "react"

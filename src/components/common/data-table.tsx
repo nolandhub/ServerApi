@@ -12,6 +12,7 @@ import {
     useReactTable
 } from '@tanstack/react-table'
 
+
 import {
     Table,
     TableBody,
@@ -20,14 +21,15 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Input } from "@/components/ui/input"
 import { DataTablePagination } from "../dashboard/data-table-pagination"
 import { useState } from "react"
-import { Search, CalendarCog, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react"
+import { ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react"
 import { TableRowEmpty, TableRowLoading } from './table-row-status'
-import { DateRangePicker } from './date-range-picker'
 import { dateRangeFilter } from '@/config/filters/dateRangeFilter'
 import { DateRange } from 'react-day-picker'
+import { useTableExport } from '@/hooks/use-table-export'
+import { DataTableToolbar } from './data-table-toolbar'
+import axios from 'axios'
 
 interface DataTableProps<TData> {
     data: TData[]
@@ -35,6 +37,9 @@ interface DataTableProps<TData> {
     loading?: boolean
     feature?: {
         rangeDateSort?: boolean
+        selectedRow?: boolean
+        exportData?: boolean
+        importData?: boolean, endPoint?: string,
     }
 }
 
@@ -47,6 +52,7 @@ export function DataTable<TData>({
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [globalFilter, setGlobalFilter] = useState('')
+    const { exportToCSV, exportToExcel, exportToJSON } = useTableExport<TData>()
 
     const table = useReactTable({
         data,
@@ -75,11 +81,20 @@ export function DataTable<TData>({
         rangeCompare?: DateRange
     }) => {
         if (!values.range?.from || !values.range?.to) return
-
         table
             .getColumn("createAt")
             ?.setFilterValue(values.range)
     }
+
+    const handleDataImport = (data: TData[]) => {
+        if (data.length == 1) {
+            const res = axios.post("/api/trips/upsert", data)
+            console.log(res)
+
+        }
+
+    }
+
 
 
     return (
@@ -87,32 +102,18 @@ export function DataTable<TData>({
             <div className='rounded-md border'>
 
                 {/* Toolbar */}
-                <div className='flex items-center px-4 py-6 gap-8'>
+                <DataTableToolbar
+                    columns={columns}
+                    globalFilter={globalFilter}
+                    onGlobalFilterChange={setGlobalFilter}
+                    onDateRangeUpdate={handleDateRangeUpdate}
+                    onExportCSV={() => exportToCSV(table)}
+                    onExportExcel={() => exportToExcel(table)}
+                    onExportJSON={() => exportToJSON(table)}
+                    onDataImport={(data) => handleDataImport(data)}
+                    feature={feature}
+                />
 
-                    {/* Global search */}
-                    <div className="flex w-[240px] items-center relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            placeholder="Tìm kiếm..."
-                            value={globalFilter ?? ''}
-                            onChange={(e) => setGlobalFilter(e.target.value)}
-                            className="peer pl-9 h-10"
-                        />
-                    </div>
-
-                    {/* Date Range Filter */}
-                    {feature?.rangeDateSort && (
-                        <div className='flex items-center gap-2'>
-                            <CalendarCog />
-                            <DateRangePicker
-                                onUpdate={handleDateRangeUpdate}
-                                align="start"
-                                locale="vi-VN"
-                                showCompare={false}
-                            />
-                        </div>
-                    )}
-                </div>
 
                 {/* Table */}
                 <Table>
@@ -189,6 +190,6 @@ export function DataTable<TData>({
                     <DataTablePagination table={table} />
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

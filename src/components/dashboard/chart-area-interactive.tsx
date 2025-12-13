@@ -1,11 +1,301 @@
+// "use client"
+
+// import * as React from "react"
+// import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+// import { useIsMobile } from "@/hooks/use-mobile"
+// import {
+//   Card,
+//   CardAction,
+//   CardContent,
+//   CardDescription,
+//   CardHeader,
+//   CardTitle,
+// } from "@/components/ui/card"
+// import {
+//   ChartConfig,
+//   ChartContainer,
+//   ChartTooltip,
+//   ChartTooltipContent,
+// } from "@/components/ui/chart"
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select"
+// import {
+//   ToggleGroup,
+//   ToggleGroupItem,
+// } from "@/components/ui/toggle-group"
+
+// export const description = "An interactive area chart"
+
+// const chartData = [
+//   { date: "2024-04-01", desktop: 222, mobile: 150 },
+//   { date: "2024-04-02", desktop: 97, mobile: 180 },
+//   { date: "2024-04-03", desktop: 167, mobile: 120 },
+//   { date: "2024-04-04", desktop: 242, mobile: 260 },
+//   { date: "2024-04-05", desktop: 373, mobile: 290 },
+//   { date: "2024-04-06", desktop: 301, mobile: 340 },
+//   { date: "2024-04-07", desktop: 245, mobile: 180 },
+//   { date: "2024-04-08", desktop: 409, mobile: 320 },
+//   { date: "2024-04-09", desktop: 59, mobile: 110 },
+//   { date: "2024-04-10", desktop: 261, mobile: 190 },
+//   { date: "2024-04-11", desktop: 327, mobile: 350 },
+//   { date: "2024-04-12", desktop: 292, mobile: 210 },
+//   { date: "2024-04-13", desktop: 342, mobile: 380 },
+//   { date: "2024-04-14", desktop: 137, mobile: 220 },
+//   { date: "2024-04-15", desktop: 120, mobile: 170 },
+//   { date: "2024-04-16", desktop: 138, mobile: 190 },
+//   { date: "2024-04-17", desktop: 446, mobile: 360 },
+//   { date: "2024-04-18", desktop: 364, mobile: 410 },
+//   { date: "2024-04-19", desktop: 243, mobile: 180 },
+//   { date: "2024-04-20", desktop: 89, mobile: 150 },
+//   { date: "2024-04-21", desktop: 137, mobile: 200 },
+//   { date: "2024-04-22", desktop: 224, mobile: 170 },
+//   { date: "2024-04-23", desktop: 138, mobile: 230 },
+//   { date: "2024-04-24", desktop: 387, mobile: 290 },
+//   { date: "2024-04-25", desktop: 215, mobile: 250 },
+//   { date: "2024-04-26", desktop: 75, mobile: 130 },
+//   { date: "2024-04-27", desktop: 383, mobile: 420 },
+//   { date: "2024-04-28", desktop: 122, mobile: 180 },
+//   { date: "2024-04-29", desktop: 315, mobile: 240 },
+//   { date: "2024-04-30", desktop: 454, mobile: 380 },
+//   { date: "2024-05-01", desktop: 165, mobile: 220 },
+//   { date: "2024-05-02", desktop: 293, mobile: 310 },
+//   { date: "2024-05-03", desktop: 247, mobile: 190 },
+//   { date: "2024-05-04", desktop: 385, mobile: 420 },
+//   { date: "2024-05-05", desktop: 481, mobile: 390 },
+//   { date: "2024-05-06", desktop: 498, mobile: 520 },
+//   { date: "2024-05-07", desktop: 388, mobile: 300 },
+//   { date: "2024-05-08", desktop: 149, mobile: 210 },
+//   { date: "2024-05-09", desktop: 227, mobile: 180 },
+//   { date: "2024-05-10", desktop: 293, mobile: 330 },
+//   { date: "2024-05-11", desktop: 335, mobile: 270 },
+//   { date: "2024-05-12", desktop: 197, mobile: 240 },
+//   { date: "2024-05-13", desktop: 197, mobile: 160 },
+//   { date: "2024-05-14", desktop: 448, mobile: 490 },
+//   { date: "2024-05-15", desktop: 473, mobile: 380 },
+//   { date: "2024-05-16", desktop: 338, mobile: 400 },
+//   { date: "2024-05-17", desktop: 499, mobile: 420 },
+//   { date: "2024-05-18", desktop: 315, mobile: 350 },
+//   { date: "2024-05-19", desktop: 235, mobile: 180 },
+//   { date: "2024-05-20", desktop: 177, mobile: 230 },
+//   { date: "2024-05-21", desktop: 82, mobile: 140 },
+//   { date: "2024-05-22", desktop: 81, mobile: 120 },
+//   { date: "2024-05-23", desktop: 252, mobile: 290 },
+//   { date: "2024-05-24", desktop: 294, mobile: 220 },
+//   { date: "2024-05-25", desktop: 201, mobile: 250 },
+//   { date: "2024-05-26", desktop: 213, mobile: 170 },
+//   { date: "2024-05-27", desktop: 420, mobile: 460 },
+//   { date: "2024-05-28", desktop: 233, mobile: 190 },
+//   { date: "2024-05-29", desktop: 78, mobile: 130 },
+//   { date: "2024-05-30", desktop: 340, mobile: 280 },
+//   { date: "2024-05-31", desktop: 178, mobile: 230 },
+//   { date: "2024-06-01", desktop: 178, mobile: 200 },
+//   { date: "2024-06-02", desktop: 470, mobile: 410 },
+//   { date: "2024-06-03", desktop: 103, mobile: 160 },
+//   { date: "2024-06-04", desktop: 439, mobile: 380 },
+//   { date: "2024-06-05", desktop: 88, mobile: 140 },
+//   { date: "2024-06-06", desktop: 294, mobile: 250 },
+//   { date: "2024-06-07", desktop: 323, mobile: 370 },
+//   { date: "2024-06-08", desktop: 385, mobile: 320 },
+//   { date: "2024-06-09", desktop: 438, mobile: 480 },
+//   { date: "2024-06-10", desktop: 155, mobile: 200 },
+//   { date: "2024-06-11", desktop: 92, mobile: 150 },
+//   { date: "2024-06-12", desktop: 492, mobile: 420 },
+//   { date: "2024-06-13", desktop: 81, mobile: 130 },
+//   { date: "2024-06-14", desktop: 426, mobile: 380 },
+//   { date: "2024-06-15", desktop: 307, mobile: 350 },
+//   { date: "2024-06-16", desktop: 371, mobile: 310 },
+//   { date: "2024-06-17", desktop: 475, mobile: 520 },
+//   { date: "2024-06-18", desktop: 107, mobile: 170 },
+//   { date: "2024-06-19", desktop: 341, mobile: 290 },
+//   { date: "2024-06-20", desktop: 408, mobile: 450 },
+//   { date: "2024-06-21", desktop: 169, mobile: 210 },
+//   { date: "2024-06-22", desktop: 317, mobile: 270 },
+//   { date: "2024-06-23", desktop: 480, mobile: 530 },
+//   { date: "2024-06-24", desktop: 132, mobile: 180 },
+//   { date: "2024-06-25", desktop: 141, mobile: 190 },
+//   { date: "2024-06-26", desktop: 434, mobile: 380 },
+//   { date: "2024-06-27", desktop: 448, mobile: 490 },
+//   { date: "2024-06-28", desktop: 149, mobile: 200 },
+//   { date: "2024-06-29", desktop: 103, mobile: 160 },
+//   { date: "2024-06-30", desktop: 446, mobile: 400 },
+// ]
+
+// const chartConfig = {
+//   visitors: {
+//     label: "Visitors",
+//   },
+//   desktop: {
+//     label: "Desktop",
+//     color: "var(--primary)",
+//   },
+//   mobile: {
+//     label: "Mobile",
+//     color: "var(--primary)",
+//   },
+// } satisfies ChartConfig
+
+// export function ChartAreaInteractive() {
+//   const isMobile = useIsMobile()
+//   const [timeRange, setTimeRange] = React.useState("90d")
+
+//   React.useEffect(() => {
+//     if (isMobile) {
+//       setTimeRange("7d")
+//     }
+//   }, [isMobile])
+
+//   const filteredData = chartData.filter((item) => {
+//     const date = new Date(item.date)
+//     const referenceDate = new Date("2024-06-30")
+//     let daysToSubtract = 90
+//     if (timeRange === "30d") {
+//       daysToSubtract = 30
+//     } else if (timeRange === "7d") {
+//       daysToSubtract = 7
+//     }
+//     const startDate = new Date(referenceDate)
+//     startDate.setDate(startDate.getDate() - daysToSubtract)
+//     return date >= startDate
+//   })
+
+//   return (
+//     <Card className="@container/card">
+//       <CardHeader>
+//         <CardTitle>Total Visitors</CardTitle>
+//         <CardDescription>
+//           <span className="hidden @[540px]/card:block">
+//             Total for the last 3 months
+//           </span>
+//           <span className="@[540px]/card:hidden">Last 3 months</span>
+//         </CardDescription>
+//         <CardAction>
+//           <ToggleGroup
+//             type="single"
+//             value={timeRange}
+//             onValueChange={setTimeRange}
+//             variant="outline"
+//             className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+//           >
+//             <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
+//             <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
+//             <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+//           </ToggleGroup>
+//           <Select value={timeRange} onValueChange={setTimeRange}>
+//             <SelectTrigger
+//               className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
+//               size="sm"
+//               aria-label="Select a value"
+//             >
+//               <SelectValue placeholder="Last 3 months" />
+//             </SelectTrigger>
+//             <SelectContent className="rounded-xl">
+//               <SelectItem value="90d" className="rounded-lg">
+//                 Last 3 months
+//               </SelectItem>
+//               <SelectItem value="30d" className="rounded-lg">
+//                 Last 30 days
+//               </SelectItem>
+//               <SelectItem value="7d" className="rounded-lg">
+//                 Last 7 days
+//               </SelectItem>
+//             </SelectContent>
+//           </Select>
+//         </CardAction>
+//       </CardHeader>
+//       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+//         <ChartContainer
+//           config={chartConfig}
+//           className="aspect-auto h-[250px] w-full"
+//         >
+//           <AreaChart data={filteredData}>
+//             <defs>
+//               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+//                 <stop
+//                   offset="5%"
+//                   stopColor="var(--color-desktop)"
+//                   stopOpacity={1.0}
+//                 />
+//                 <stop
+//                   offset="95%"
+//                   stopColor="var(--color-desktop)"
+//                   stopOpacity={0.1}
+//                 />
+//               </linearGradient>
+//               <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+//                 <stop
+//                   offset="5%"
+//                   stopColor="var(--color-mobile)"
+//                   stopOpacity={0.8}
+//                 />
+//                 <stop
+//                   offset="95%"
+//                   stopColor="var(--color-mobile)"
+//                   stopOpacity={0.1}
+//                 />
+//               </linearGradient>
+//             </defs>
+//             <CartesianGrid vertical={false} />
+//             <XAxis
+//               dataKey="date"
+//               tickLine={false}
+//               axisLine={false}
+//               tickMargin={8}
+//               minTickGap={32}
+//               tickFormatter={(value) => {
+//                 const date = new Date(value)
+//                 return date.toLocaleDateString("en-US", {
+//                   month: "short",
+//                   day: "numeric",
+//                 })
+//               }}
+//             />
+//             <ChartTooltip
+//               cursor={false}
+//               defaultIndex={isMobile ? -1 : 10}
+//               content={
+//                 <ChartTooltipContent
+//                   labelFormatter={(value) => {
+//                     return new Date(value).toLocaleDateString("en-US", {
+//                       month: "short",
+//                       day: "numeric",
+//                     })
+//                   }}
+//                   indicator="dot"
+//                 />
+//               }
+//             />
+//             <Area
+//               dataKey="mobile"
+//               type="natural"
+//               fill="url(#fillMobile)"
+//               stroke="var(--color-mobile)"
+//               stackId="a"
+//             />
+//             <Area
+//               dataKey="desktop"
+//               type="natural"
+//               fill="url(#fillDesktop)"
+//               stroke="var(--color-desktop)"
+//               stackId="a"
+//             />
+//           </AreaChart>
+//         </ChartContainer>
+//       </CardContent>
+//     </Card>
+//   )
+// }
+
 "use client"
 
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-import { useIsMobile } from "@/hooks/use-mobile"
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -24,130 +314,118 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
 
-export const description = "An interactive area chart"
-
+// Dữ liệu demo về đặt vé (xe khách, máy bay, tàu hỏa, v.v.)
 const chartData = [
-  { date: "2024-04-01", desktop: 222, mobile: 150 },
-  { date: "2024-04-02", desktop: 97, mobile: 180 },
-  { date: "2024-04-03", desktop: 167, mobile: 120 },
-  { date: "2024-04-04", desktop: 242, mobile: 260 },
-  { date: "2024-04-05", desktop: 373, mobile: 290 },
-  { date: "2024-04-06", desktop: 301, mobile: 340 },
-  { date: "2024-04-07", desktop: 245, mobile: 180 },
-  { date: "2024-04-08", desktop: 409, mobile: 320 },
-  { date: "2024-04-09", desktop: 59, mobile: 110 },
-  { date: "2024-04-10", desktop: 261, mobile: 190 },
-  { date: "2024-04-11", desktop: 327, mobile: 350 },
-  { date: "2024-04-12", desktop: 292, mobile: 210 },
-  { date: "2024-04-13", desktop: 342, mobile: 380 },
-  { date: "2024-04-14", desktop: 137, mobile: 220 },
-  { date: "2024-04-15", desktop: 120, mobile: 170 },
-  { date: "2024-04-16", desktop: 138, mobile: 190 },
-  { date: "2024-04-17", desktop: 446, mobile: 360 },
-  { date: "2024-04-18", desktop: 364, mobile: 410 },
-  { date: "2024-04-19", desktop: 243, mobile: 180 },
-  { date: "2024-04-20", desktop: 89, mobile: 150 },
-  { date: "2024-04-21", desktop: 137, mobile: 200 },
-  { date: "2024-04-22", desktop: 224, mobile: 170 },
-  { date: "2024-04-23", desktop: 138, mobile: 230 },
-  { date: "2024-04-24", desktop: 387, mobile: 290 },
-  { date: "2024-04-25", desktop: 215, mobile: 250 },
-  { date: "2024-04-26", desktop: 75, mobile: 130 },
-  { date: "2024-04-27", desktop: 383, mobile: 420 },
-  { date: "2024-04-28", desktop: 122, mobile: 180 },
-  { date: "2024-04-29", desktop: 315, mobile: 240 },
-  { date: "2024-04-30", desktop: 454, mobile: 380 },
-  { date: "2024-05-01", desktop: 165, mobile: 220 },
-  { date: "2024-05-02", desktop: 293, mobile: 310 },
-  { date: "2024-05-03", desktop: 247, mobile: 190 },
-  { date: "2024-05-04", desktop: 385, mobile: 420 },
-  { date: "2024-05-05", desktop: 481, mobile: 390 },
-  { date: "2024-05-06", desktop: 498, mobile: 520 },
-  { date: "2024-05-07", desktop: 388, mobile: 300 },
-  { date: "2024-05-08", desktop: 149, mobile: 210 },
-  { date: "2024-05-09", desktop: 227, mobile: 180 },
-  { date: "2024-05-10", desktop: 293, mobile: 330 },
-  { date: "2024-05-11", desktop: 335, mobile: 270 },
-  { date: "2024-05-12", desktop: 197, mobile: 240 },
-  { date: "2024-05-13", desktop: 197, mobile: 160 },
-  { date: "2024-05-14", desktop: 448, mobile: 490 },
-  { date: "2024-05-15", desktop: 473, mobile: 380 },
-  { date: "2024-05-16", desktop: 338, mobile: 400 },
-  { date: "2024-05-17", desktop: 499, mobile: 420 },
-  { date: "2024-05-18", desktop: 315, mobile: 350 },
-  { date: "2024-05-19", desktop: 235, mobile: 180 },
-  { date: "2024-05-20", desktop: 177, mobile: 230 },
-  { date: "2024-05-21", desktop: 82, mobile: 140 },
-  { date: "2024-05-22", desktop: 81, mobile: 120 },
-  { date: "2024-05-23", desktop: 252, mobile: 290 },
-  { date: "2024-05-24", desktop: 294, mobile: 220 },
-  { date: "2024-05-25", desktop: 201, mobile: 250 },
-  { date: "2024-05-26", desktop: 213, mobile: 170 },
-  { date: "2024-05-27", desktop: 420, mobile: 460 },
-  { date: "2024-05-28", desktop: 233, mobile: 190 },
-  { date: "2024-05-29", desktop: 78, mobile: 130 },
-  { date: "2024-05-30", desktop: 340, mobile: 280 },
-  { date: "2024-05-31", desktop: 178, mobile: 230 },
-  { date: "2024-06-01", desktop: 178, mobile: 200 },
-  { date: "2024-06-02", desktop: 470, mobile: 410 },
-  { date: "2024-06-03", desktop: 103, mobile: 160 },
-  { date: "2024-06-04", desktop: 439, mobile: 380 },
-  { date: "2024-06-05", desktop: 88, mobile: 140 },
-  { date: "2024-06-06", desktop: 294, mobile: 250 },
-  { date: "2024-06-07", desktop: 323, mobile: 370 },
-  { date: "2024-06-08", desktop: 385, mobile: 320 },
-  { date: "2024-06-09", desktop: 438, mobile: 480 },
-  { date: "2024-06-10", desktop: 155, mobile: 200 },
-  { date: "2024-06-11", desktop: 92, mobile: 150 },
-  { date: "2024-06-12", desktop: 492, mobile: 420 },
-  { date: "2024-06-13", desktop: 81, mobile: 130 },
-  { date: "2024-06-14", desktop: 426, mobile: 380 },
-  { date: "2024-06-15", desktop: 307, mobile: 350 },
-  { date: "2024-06-16", desktop: 371, mobile: 310 },
-  { date: "2024-06-17", desktop: 475, mobile: 520 },
-  { date: "2024-06-18", desktop: 107, mobile: 170 },
-  { date: "2024-06-19", desktop: 341, mobile: 290 },
-  { date: "2024-06-20", desktop: 408, mobile: 450 },
-  { date: "2024-06-21", desktop: 169, mobile: 210 },
-  { date: "2024-06-22", desktop: 317, mobile: 270 },
-  { date: "2024-06-23", desktop: 480, mobile: 530 },
-  { date: "2024-06-24", desktop: 132, mobile: 180 },
-  { date: "2024-06-25", desktop: 141, mobile: 190 },
-  { date: "2024-06-26", desktop: 434, mobile: 380 },
-  { date: "2024-06-27", desktop: 448, mobile: 490 },
-  { date: "2024-06-28", desktop: 149, mobile: 200 },
-  { date: "2024-06-29", desktop: 103, mobile: 160 },
-  { date: "2024-06-30", desktop: 446, mobile: 400 },
+  { date: "2024-04-01", online: 145, offline: 98 },
+  { date: "2024-04-02", online: 178, offline: 112 },
+  { date: "2024-04-03", online: 156, offline: 85 },
+  { date: "2024-04-04", online: 223, offline: 145 },
+  { date: "2024-04-05", online: 298, offline: 178 },
+  { date: "2024-04-06", online: 267, offline: 156 },
+  { date: "2024-04-07", online: 189, offline: 123 },
+  { date: "2024-04-08", online: 312, offline: 189 },
+  { date: "2024-04-09", online: 134, offline: 76 },
+  { date: "2024-04-10", online: 198, offline: 134 },
+  { date: "2024-04-11", online: 276, offline: 167 },
+  { date: "2024-04-12", online: 234, offline: 145 },
+  { date: "2024-04-13", online: 289, offline: 178 },
+  { date: "2024-04-14", online: 167, offline: 98 },
+  { date: "2024-04-15", online: 145, offline: 89 },
+  { date: "2024-04-16", online: 178, offline: 112 },
+  { date: "2024-04-17", online: 356, offline: 198 },
+  { date: "2024-04-18", online: 334, offline: 212 },
+  { date: "2024-04-19", online: 212, offline: 134 },
+  { date: "2024-04-20", online: 156, offline: 98 },
+  { date: "2024-04-21", online: 189, offline: 123 },
+  { date: "2024-04-22", online: 198, offline: 112 },
+  { date: "2024-04-23", online: 223, offline: 145 },
+  { date: "2024-04-24", online: 312, offline: 178 },
+  { date: "2024-04-25", online: 245, offline: 156 },
+  { date: "2024-04-26", online: 134, offline: 87 },
+  { date: "2024-04-27", online: 367, offline: 212 },
+  { date: "2024-04-28", online: 178, offline: 123 },
+  { date: "2024-04-29", online: 289, offline: 167 },
+  { date: "2024-04-30", online: 398, offline: 234 },
+  { date: "2024-05-01", online: 423, offline: 267 },
+  { date: "2024-05-02", online: 389, offline: 245 },
+  { date: "2024-05-03", online: 345, offline: 198 },
+  { date: "2024-05-04", online: 456, offline: 278 },
+  { date: "2024-05-05", online: 412, offline: 256 },
+  { date: "2024-05-06", online: 467, offline: 289 },
+  { date: "2024-05-07", online: 378, offline: 212 },
+  { date: "2024-05-08", online: 234, offline: 145 },
+  { date: "2024-05-09", online: 267, offline: 156 },
+  { date: "2024-05-10", online: 312, offline: 189 },
+  { date: "2024-05-11", online: 334, offline: 198 },
+  { date: "2024-05-12", online: 278, offline: 167 },
+  { date: "2024-05-13", online: 245, offline: 134 },
+  { date: "2024-05-14", online: 423, offline: 256 },
+  { date: "2024-05-15", online: 398, offline: 234 },
+  { date: "2024-05-16", online: 356, offline: 212 },
+  { date: "2024-05-17", online: 445, offline: 267 },
+  { date: "2024-05-18", online: 378, offline: 223 },
+  { date: "2024-05-19", online: 289, offline: 178 },
+  { date: "2024-05-20", online: 256, offline: 156 },
+  { date: "2024-05-21", online: 198, offline: 112 },
+  { date: "2024-05-22", online: 189, offline: 98 },
+  { date: "2024-05-23", online: 312, offline: 189 },
+  { date: "2024-05-24", online: 334, offline: 198 },
+  { date: "2024-05-25", online: 289, offline: 167 },
+  { date: "2024-05-26", online: 267, offline: 145 },
+  { date: "2024-05-27", online: 423, offline: 256 },
+  { date: "2024-05-28", online: 298, offline: 178 },
+  { date: "2024-05-29", online: 178, offline: 112 },
+  { date: "2024-05-30", online: 356, offline: 212 },
+  { date: "2024-05-31", online: 267, offline: 156 },
+  { date: "2024-06-01", online: 278, offline: 167 },
+  { date: "2024-06-02", online: 445, offline: 267 },
+  { date: "2024-06-03", online: 198, offline: 123 },
+  { date: "2024-06-04", online: 412, offline: 245 },
+  { date: "2024-06-05", online: 167, offline: 98 },
+  { date: "2024-06-06", online: 334, offline: 198 },
+  { date: "2024-06-07", online: 378, offline: 223 },
+  { date: "2024-06-08", online: 389, offline: 234 },
+  { date: "2024-06-09", online: 456, offline: 278 },
+  { date: "2024-06-10", online: 245, offline: 145 },
+  { date: "2024-06-11", online: 189, offline: 112 },
+  { date: "2024-06-12", online: 467, offline: 289 },
+  { date: "2024-06-13", online: 178, offline: 98 },
+  { date: "2024-06-14", online: 423, offline: 256 },
+  { date: "2024-06-15", online: 367, offline: 212 },
+  { date: "2024-06-16", online: 389, offline: 223 },
+  { date: "2024-06-17", online: 478, offline: 298 },
+  { date: "2024-06-18", online: 198, offline: 123 },
+  { date: "2024-06-19", online: 356, offline: 198 },
+  { date: "2024-06-20", online: 412, offline: 256 },
+  { date: "2024-06-21", online: 234, offline: 145 },
+  { date: "2024-06-22", online: 334, offline: 198 },
+  { date: "2024-06-23", online: 489, offline: 312 },
+  { date: "2024-06-24", online: 223, offline: 134 },
+  { date: "2024-06-25", online: 245, offline: 145 },
+  { date: "2024-06-26", online: 423, offline: 267 },
+  { date: "2024-06-27", online: 456, offline: 289 },
+  { date: "2024-06-28", online: 267, offline: 156 },
+  { date: "2024-06-29", online: 198, offline: 123 },
+  { date: "2024-06-30", online: 445, offline: 278 },
 ]
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  tickets: {
+    label: "Vé đã đặt",
   },
-  desktop: {
-    label: "Desktop",
-    color: "var(--primary)",
+  online: {
+    label: "Đặt online",
+    color: "hsl(var(--chart-1))",
   },
-  mobile: {
-    label: "Mobile",
-    color: "var(--primary)",
+  offline: {
+    label: "Đặt tại quầy",
+    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
 
-export function ChartAreaInteractive() {
-  const isMobile = useIsMobile()
+export default function ChartAreaInteractive() {
   const [timeRange, setTimeRange] = React.useState("90d")
-
-  React.useEffect(() => {
-    if (isMobile) {
-      setTimeRange("7d")
-    }
-  }, [isMobile])
 
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date)
@@ -164,77 +442,62 @@ export function ChartAreaInteractive() {
   })
 
   return (
-    <Card className="@container/card">
-      <CardHeader>
-        <CardTitle>Total Visitors</CardTitle>
-        <CardDescription>
-          <span className="hidden @[540px]/card:block">
-            Total for the last 3 months
-          </span>
-          <span className="@[540px]/card:hidden">Last 3 months</span>
-        </CardDescription>
-        <CardAction>
-          <ToggleGroup
-            type="single"
-            value={timeRange}
-            onValueChange={setTimeRange}
-            variant="outline"
-            className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+    <Card>
+      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+        <div className="grid flex-1 gap-1 text-center sm:text-left">
+          <CardTitle>Thống Kê Đặt Vé</CardTitle>
+          <CardDescription>
+            Tổng số vé đã đặt trong 3 tháng qua
+          </CardDescription>
+        </div>
+        <Select value={timeRange} onValueChange={setTimeRange}>
+          <SelectTrigger
+            className="w-[160px] rounded-lg sm:ml-auto"
+            aria-label="Chọn khoảng thời gian"
           >
-            <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-            <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
-          </ToggleGroup>
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger
-              className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
-              size="sm"
-              aria-label="Select a value"
-            >
-              <SelectValue placeholder="Last 3 months" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="90d" className="rounded-lg">
-                Last 3 months
-              </SelectItem>
-              <SelectItem value="30d" className="rounded-lg">
-                Last 30 days
-              </SelectItem>
-              <SelectItem value="7d" className="rounded-lg">
-                Last 7 days
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </CardAction>
+            <SelectValue placeholder="3 tháng qua" />
+          </SelectTrigger>
+          <SelectContent className="rounded-xl">
+            <SelectItem value="90d" className="rounded-lg">
+              3 tháng qua
+            </SelectItem>
+            <SelectItem value="30d" className="rounded-lg">
+              30 ngày qua
+            </SelectItem>
+            <SelectItem value="7d" className="rounded-lg">
+              7 ngày qua
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[280px] w-full"
         >
           <AreaChart data={filteredData}>
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillOnline" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={1.0}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-online)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-online)"
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
+              <linearGradient id="fillOffline" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-offline)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-offline)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
@@ -248,7 +511,7 @@ export function ChartAreaInteractive() {
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value)
-                return date.toLocaleDateString("en-US", {
+                return date.toLocaleDateString("vi-VN", {
                   month: "short",
                   day: "numeric",
                 })
@@ -256,13 +519,13 @@ export function ChartAreaInteractive() {
             />
             <ChartTooltip
               cursor={false}
-              defaultIndex={isMobile ? -1 : 10}
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
+                    return new Date(value).toLocaleDateString("vi-VN", {
                       day: "numeric",
+                      month: "long",
+                      year: "numeric",
                     })
                   }}
                   indicator="dot"
@@ -270,17 +533,17 @@ export function ChartAreaInteractive() {
               }
             />
             <Area
-              dataKey="mobile"
+              dataKey="offline"
               type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
+              fill="url(#fillOffline)"
+              stroke="var(--color-offline)"
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="online"
               type="natural"
-              fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
+              fill="url(#fillOnline)"
+              stroke="var(--color-online)"
               stackId="a"
             />
           </AreaChart>

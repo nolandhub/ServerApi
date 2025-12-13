@@ -3,8 +3,8 @@ import * as React from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getAllTicket } from "@/firebase/firestore/ticketFunc"
 import { getAllSaleConfigs } from "@/services/saleConfigs"
-import { TicketTable } from "../table/ticket/table-ticket"
-import { SaleConfigTable } from "../table/saleconfig/table-sale-config"
+import { TicketTable } from "../table/table-ticket/table-ticket"
+import { SaleConfigTable } from "../table/table-saleconfig/table-sale-config"
 
 
 export interface TableTabConfig<T> {

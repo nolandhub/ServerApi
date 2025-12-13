@@ -1,57 +1,3 @@
-/*
-SQL Schema (suggested)
-----------------------
--- Trips table (existing)
-CREATE TABLE trips (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  route_id INT NOT NULL,
-  company_id INT NOT NULL,
-  bus_id INT NOT NULL,
-  base_price DECIMAL(10,2) NOT NULL,
-  price_type_id INT DEFAULT NULL
-);
-
--- Price rules per trip per weekday
-CREATE TABLE pricing_rules (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  trip_id INT NOT NULL,
-  week_day TINYINT NOT NULL COMMENT '1=Mon .. 7=Sun',
-  price_adjustment DECIMAL(10,2) DEFAULT 0 COMMENT 'absolute add/subtract',
-  multiplier DECIMAL(5,4) DEFAULT 1.0 COMMENT 'multiply base_price, override if non-1',
-  UNIQUE(trip_id, week_day)
-);
-
--- Sales / promotions
-CREATE TABLE sales (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  code VARCHAR(50) NOT NULL UNIQUE,
-  name VARCHAR(255) NOT NULL,
-  type ENUM('percent','fixed') NOT NULL,
-  value DECIMAL(10,2) NOT NULL,
-  start_date DATE,
-  end_date DATE
-);
-
--- Which sale applies to which trip / route / company (data-driven)
-CREATE TABLE sale_targets (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  sale_id INT NOT NULL,
-  trip_id INT DEFAULT NULL,
-  route_id INT DEFAULT NULL,
-  company_id INT DEFAULT NULL
-);
-
--- Precomputed cache for fast UI (optional)
-CREATE TABLE trip_price_cache (
-  trip_id INT PRIMARY KEY,
-  date DATE NOT NULL,
-  final_price DECIMAL(10,2) NOT NULL,
-  applied_sale_id INT NULL
-);
-
-*/
-
-// shadcn components assumed available
 "use client"
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -79,8 +25,8 @@ type PricingRule = { week_day: number; price_adjustment: number; multiplier: num
 type Sale = { id: number; code: string; name: string; type: 'percent' | 'fixed'; value: number };
 
 const mockTrips: Trip[] = [
-    { id: 1, routeName: 'DN - HN', companyName: 'Phuong Trang', busName: 'F01', basePrice: 400000, priceType: 'Standard' },
-    { id: 2, routeName: 'DN - Hoi An', companyName: 'LocalBus', busName: 'L02', basePrice: 150000, priceType: 'Express' },
+    { id: 1, routeName: 'Đà Nẵng - Hà Nội', companyName: 'Phương Trang', busName: 'F01', basePrice: 400000, priceType: 'Tiêu chuẩn' },
+    { id: 2, routeName: 'Đà Nẵng - Hội An', companyName: 'LocalBus', busName: 'L02', basePrice: 150000, priceType: 'Express' },
 ];
 
 const mockRules: Record<number, PricingRule[]> = {
@@ -100,9 +46,8 @@ export default function PricingAdmin() {
 
     const weekday = useMemo(() => {
         if (!pickedDate) return null;
-        // JS: 0=Sun .. 6=Sat -> convert to 1..7 (Mon=1.. Sun=7)
         const js = pickedDate.getDay();
-        return js === 0 ? 7 : js;
+        return js === 0 ? 7 : js; // JS: 0=Sun..6=Sat → 1=Mon..7=Sun
     }, [pickedDate]);
 
     function openDetails(tripId: number) {
@@ -130,68 +75,70 @@ export default function PricingAdmin() {
     }
 
     return (
-        <div className="p-4 space-y-4">
-            <Card>
-                <CardHeader className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <LucideCalendar />
-                        <CardTitle>Pricing — Preview</CardTitle>
+        <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+            <Card className="shadow-lg">
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-center gap-2 text-lg font-semibold">
+                        <LucideCalendar /> Quản lý giá vé
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-col sm:flex-row items-center gap-2">
                         <Calendar22 date={pickedDate} onSelect={(date) => setPickedDate(date)} />
                         <Select onValueChange={(v) => console.log('filter', v)}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Filter route / company" />
+                            <SelectTrigger className="w-[200px]">
+                                <SelectValue placeholder="Lọc theo tuyến / công ty" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">All</SelectItem>
-                                <SelectItem value="company:1">Phuong Trang</SelectItem>
+                                <SelectItem value="all">Tất cả</SelectItem>
+                                <SelectItem value="company:1">Phương Trang</SelectItem>
                                 <SelectItem value="company:2">LocalBus</SelectItem>
                             </SelectContent>
                         </Select>
-                        <Button onClick={() => alert('Apply filters (call API)')}>Apply</Button>
+                        <Button onClick={() => alert('Áp dụng bộ lọc')}>Áp dụng</Button>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-sm text-muted-foreground">Picked date: {pickedDate ? format(pickedDate, 'yyyy-MM-dd (EEEE)') : '—'}</div>
+                    <div className="text-sm text-gray-500">Ngày đã chọn: {pickedDate ? format(pickedDate, 'yyyy-MM-dd (EEEE)') : '—'}</div>
 
-                    <div className="mt-4">
-                        <Table>
+                    <div className="mt-4 overflow-x-auto">
+                        <Table className="min-w-[900px]">
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Trip</TableHead>
-                                    <TableHead>Route</TableHead>
-                                    <TableHead>Company</TableHead>
-                                    <TableHead>Bus</TableHead>
-                                    <TableHead>Sale</TableHead>
-                                    <TableHead>Price Rule</TableHead>
-                                    <TableHead>Final Price</TableHead>
-                                    <TableHead>Action</TableHead>
+                                    <TableHead>STT</TableHead>
+                                    <TableHead>Tuyến</TableHead>
+                                    <TableHead>Công ty</TableHead>
+                                    <TableHead>Xe</TableHead>
+                                    <TableHead>Khuyến mãi</TableHead>
+                                    <TableHead>Điều chỉnh giá</TableHead>
+                                    <TableHead>Giá cuối</TableHead>
+                                    <TableHead>Hành động</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {mockTrips.map(t => (
-                                    <TableRow key={t.id}>
-                                        <TableCell>{t.id}</TableCell>
+                                {mockTrips.map((t, index) => (
+                                    <TableRow key={t.id} className="hover:bg-gray-100">
+                                        <TableCell>{index + 1}</TableCell>
                                         <TableCell>{t.routeName}</TableCell>
                                         <TableCell>{t.companyName}</TableCell>
                                         <TableCell>{t.busName}</TableCell>
-                                        <TableCell>{mockSales[t.id] ? `${mockSales[t.id]!.name} (${mockSales[t.id]!.type === 'percent' ? mockSales[t.id]!.value + '%' : mockSales[t.id]!.value + 'đ'})` : '—'}</TableCell>
                                         <TableCell>
-                                            {/* Show compact rule summary */}
+                                            {mockSales[t.id]
+                                                ? `${mockSales[t.id]!.name} (${mockSales[t.id]!.type === 'percent' ? mockSales[t.id]!.value + '%' : mockSales[t.id]!.value + 'đ'})`
+                                                : '—'}
+                                        </TableCell>
+                                        <TableCell>
                                             {(mockRules[t.id] || []).length ? (
-                                                <div className="text-sm">
+                                                <div className="text-sm space-y-1">
                                                     {(mockRules[t.id] || []).map(r => (
-                                                        <div key={r.week_day}>Thứ {r.week_day}: {r.price_adjustment ? `+${r.price_adjustment}` : ''}{r.multiplier && r.multiplier !== 1 ? ` x${r.multiplier}` : ''}</div>
+                                                        <div key={r.week_day}>
+                                                            Thứ {r.week_day}: {r.price_adjustment ? `+${r.price_adjustment}đ` : ''}{r.multiplier && r.multiplier !== 1 ? ` x${r.multiplier}` : ''}
+                                                        </div>
                                                     ))}
                                                 </div>
-                                            ) : 'Default'}
+                                            ) : 'Mặc định'}
                                         </TableCell>
                                         <TableCell>{Intl.NumberFormat('vi-VN').format(computeFinalPrice(t))}đ</TableCell>
                                         <TableCell>
-                                            <div className="flex gap-2">
-                                                <Button size="sm" onClick={() => openDetails(t.id)}>View</Button>
-                                            </div>
+                                            <Button size="sm" variant="outline" onClick={() => openDetails(t.id)}>Xem chi tiết</Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -201,45 +148,44 @@ export default function PricingAdmin() {
                 </CardContent>
             </Card>
 
+            {/* Drawer chi tiết trip */}
             <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <DrawerContent>
                     <DrawerHeader>
-                        <DrawerTitle>Trip Pricing Details</DrawerTitle>
+                        <DrawerTitle>Chi tiết giá vé</DrawerTitle>
                     </DrawerHeader>
-                    <div>
+                    <div className="space-y-4 p-4">
                         {selectedTripId ? (
-                            <div className="space-y-4">
-                                {/* Summary */}
-                                <Card>
+                            <>
+                                {/* Thông tin tổng quan */}
+                                <Card className="shadow-sm">
                                     <CardHeader>
-                                        <CardTitle>Trip #{selectedTripId}</CardTitle>
+                                        <CardTitle>Chuyến #{selectedTripId}</CardTitle>
                                     </CardHeader>
-                                    <CardContent>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div>
-                                                <div className="text-sm text-muted-foreground">Price Type</div>
-                                                <div>Standard</div>
-                                            </div>
-                                            <div>
-                                                <div className="text-sm text-muted-foreground">Transfer Type</div>
-                                                <div>Direct</div>
-                                            </div>
+                                    <CardContent className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                                        <div>
+                                            <div className="text-gray-500">Loại giá</div>
+                                            <div>Tiêu chuẩn</div>
+                                        </div>
+                                        <div>
+                                            <div className="text-gray-500">Loại chuyến</div>
+                                            <div>Chuyến thẳng</div>
                                         </div>
                                     </CardContent>
                                 </Card>
 
-                                {/* Weekday table */}
-                                <Card>
+                                {/* Bảng điều chỉnh theo ngày trong tuần */}
+                                <Card className="shadow-sm">
                                     <CardHeader>
-                                        <CardTitle>Weekday Adjustments</CardTitle>
+                                        <CardTitle>Điều chỉnh theo ngày trong tuần</CardTitle>
                                     </CardHeader>
                                     <CardContent>
                                         <Table>
                                             <TableHeader>
                                                 <TableRow>
-                                                    <TableHead>Weekday</TableHead>
-                                                    <TableHead>Adjustment</TableHead>
-                                                    <TableHead>Multiplier</TableHead>
+                                                    <TableHead>Thứ</TableHead>
+                                                    <TableHead>Điều chỉnh (đ)</TableHead>
+                                                    <TableHead>Hệ số nhân</TableHead>
                                                 </TableRow>
                                             </TableHeader>
                                             <TableBody>
@@ -255,29 +201,26 @@ export default function PricingAdmin() {
                                     </CardContent>
                                 </Card>
 
-                                {/* Time slots / prices */}
-                                <Card>
+                                {/* Khung giờ và giá */}
+                                <Card className="shadow-sm">
                                     <CardHeader>
-                                        <CardTitle>Time - Price (per trip)</CardTitle>
+                                        <CardTitle>Giá theo khung giờ</CardTitle>
                                     </CardHeader>
-                                    <CardContent>
-                                        <div className="space-y-2">
-                                            <div className="flex items-center justify-between">
-                                                <div>08:00</div>
-                                                <div>400,000đ</div>
-                                            </div>
-                                            <div className="flex items-center justify-between">
-                                                <div>12:00</div>
-                                                <div>420,000đ</div>
-                                            </div>
+                                    <CardContent className="space-y-2">
+                                        <div className="flex justify-between bg-gray-100 p-2 rounded">
+                                            <div>08:00</div>
+                                            <div>400,000đ</div>
+                                        </div>
+                                        <div className="flex justify-between bg-gray-100 p-2 rounded">
+                                            <div>12:00</div>
+                                            <div>420,000đ</div>
                                         </div>
                                     </CardContent>
                                 </Card>
-
-                            </div>
+                            </>
                         ) : (
-                            <div className="flex items-center gap-2">
-                                <LucideInfo /> Select a trip to view details
+                            <div className="flex items-center gap-2 text-gray-500">
+                                <LucideInfo /> Chọn chuyến để xem chi tiết
                             </div>
                         )}
                     </div>

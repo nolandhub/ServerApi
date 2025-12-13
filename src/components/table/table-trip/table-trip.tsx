@@ -1,8 +1,8 @@
 "use client"
 
 import { DataTable } from "@/components/common/data-table"
-import ConfirmDelete from "@/components/trip/confirm-delete"
-import SheetEdit from "@/components/trip/sheet-edit"
+import ConfirmDelete from "@/components/table/table-trip/confirm-delete"
+import SheetEdit from "@/components/table/table-trip/sheet-edit"
 import { tripColumns } from "@/config/columns/tripColumns"
 import { tripSchema } from "@/config/datafield/tripConfigSchema"
 import { useTripStore } from "@/store/tripStore"
@@ -23,7 +23,13 @@ export default function TripTable({ data, loading }: TripTableProps) {
 
     return (
         <div className="flex-1 p-5">
-            <DataTable loading={loading} data={data} columns={tripColumns} />
+            <DataTable
+                loading={loading}
+                data={data}
+                columns={tripColumns}
+                feature={{ importData: true, exportData: true }}
+
+            />
             <SheetEdit openSheet={openSheet} closeSheet={closeSheet} trip={tripEdit} />
 
             {openDialog && deleteId !== null && deleteId !== undefined && (
