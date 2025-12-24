@@ -15,6 +15,7 @@ export function SaleConfigTable({ data, loading }: SaleConfigProps) {
             columns={saleConfigColumns}
             data={data}
             loading={loading}
+            feature={{ pagination: true }}
         />
     )
 }

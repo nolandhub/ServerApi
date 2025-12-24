@@ -13,6 +13,8 @@ import {
     query,
     orderBy,
 } from "firebase/firestore";
+import { useRef } from "react";
+import { toast } from "sonner";
 
 
 const TICKET_COLLECTION = "tickets";
@@ -43,6 +45,7 @@ export async function mergeTicket(ticketId: string, data: TicketUpdate) {
  */
 export function listenTickets(callback: (tickets: Ticket[]) => void) {
     const ref = collection(db, TICKET_COLLECTION);
+    let isInitialLoad = true
     // Optionally add ordering / filters here
     const q = query(ref, orderBy("createAt", "desc"));
 
@@ -51,8 +54,19 @@ export function listenTickets(callback: (tickets: Ticket[]) => void) {
         (snapshot) => {
             const tickets = snapshot.docs.map((d) => ({
                 id: d.id,
-                ...(d.data() as any),
+                ...d.data(),
             })) as Ticket[];
+
+            if (!isInitialLoad) {
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === "added") {
+                        toast.success(`Có 1 vé mới vừa được tạo!`)
+                    }
+                });
+            }
+            isInitialLoad = false
+
+
             callback(tickets);
         },
         (error) => {

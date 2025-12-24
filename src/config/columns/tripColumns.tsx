@@ -11,7 +11,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import z from "zod";
 import { tripSchema } from "../datafield/tripConfigSchema";
 import { Badge } from "@/components/ui/badge";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, MoreVerticalIcon } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useTripStore } from "@/store/tripStore";
 
@@ -78,9 +78,11 @@ export const tripColumns: ColumnDef<z.infer<typeof tripSchema>>[] = [
                 return <Badge className="bg-gray-500">Chưa chọn</Badge>
             }
             return (
-                <Badge className={`${select.color}`}>
-                    {select.label}
-                </Badge>
+                <div className=" flex justify-center">
+                    <Badge className={`${select.color}`}>
+                        {select.label}
+                    </Badge>
+                </div>
             )
         }
     },
@@ -90,9 +92,9 @@ export const tripColumns: ColumnDef<z.infer<typeof tripSchema>>[] = [
     },
     {
         accessorKey: "isActive",
-        header: "Trạng thái",
+        header: () => <div className="">Trạng thái</div>,
         cell: ({ row }) =>
-            <div>
+            <div className="flex justify-center">
                 {
                     row.original.isActive == 1
                         ? <Badge className="bg-green-500">On</Badge>
@@ -107,13 +109,12 @@ export const tripColumns: ColumnDef<z.infer<typeof tripSchema>>[] = [
             if (!trip) {
                 return null;
             }
-
             const { openEditSheet, openConfirmDelete } = useTripStore.getState();
 
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">...</Button>
+                        <Button variant="ghost" size="icon"><MoreVerticalIcon /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-32">
                         <DropdownMenuItem onClick={() => openEditSheet(trip)}>Chỉnh sửa</DropdownMenuItem>

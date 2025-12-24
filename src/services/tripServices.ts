@@ -127,9 +127,9 @@ function calculateSalePrice(originalPrice: number | string, sale: rawSaleConfig)
         : sale.saleValue;
 
     if (sale.saleType === 'percent') {
-        return Math.round(price * (1 - saleValue / 100));
+        return Math.round(price * (1 + saleValue / 100));
     }
-    return Math.max(0, price - saleValue);
+    return Math.max(0, price + saleValue);
 }
 
 // ============================================================================
@@ -248,10 +248,6 @@ export function mergeTripData(
         saleSnapShot: saleSnapshotMap[trip.tripId] || null
     }));
 }
-
-
-
-
 
 
 // ============================================================================

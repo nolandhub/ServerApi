@@ -27,8 +27,6 @@ export default function TripTable({ data, loading }: TripTableProps) {
                 loading={loading}
                 data={data}
                 columns={tripColumns}
-                feature={{ importData: true, exportData: true }}
-
             />
             <SheetEdit openSheet={openSheet} closeSheet={closeSheet} trip={tripEdit} />
 

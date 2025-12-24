@@ -36,10 +36,10 @@ interface DataTableProps<TData> {
     columns: ColumnDef<TData>[]
     loading?: boolean
     feature?: {
+        pagination?: boolean
         rangeDateSort?: boolean
-        selectedRow?: boolean
-        exportData?: boolean
-        importData?: boolean, endPoint?: string,
+        export?: boolean,
+        import?: boolean
     }
 }
 
@@ -52,7 +52,7 @@ export function DataTable<TData>({
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [globalFilter, setGlobalFilter] = useState('')
-    const { exportToCSV, exportToExcel, exportToJSON } = useTableExport<TData>()
+    const { exportToCSV, exportToExcel } = useTableExport<TData>()
 
     const table = useReactTable({
         data,
@@ -86,16 +86,11 @@ export function DataTable<TData>({
             ?.setFilterValue(values.range)
     }
 
-    const handleDataImport = (data: TData[]) => {
-        if (data.length == 1) {
-            const res = axios.post("/api/trips/upsert", data)
-            console.log(res)
+    const handleDataImport = async (data: TData[]) => {
 
-        }
+
 
     }
-
-
 
     return (
         <div className='w-full'>
@@ -103,15 +98,9 @@ export function DataTable<TData>({
 
                 {/* Toolbar */}
                 <DataTableToolbar
-                    columns={columns}
                     globalFilter={globalFilter}
                     onGlobalFilterChange={setGlobalFilter}
                     onDateRangeUpdate={handleDateRangeUpdate}
-                    onExportCSV={() => exportToCSV(table)}
-                    onExportExcel={() => exportToExcel(table)}
-                    onExportJSON={() => exportToJSON(table)}
-                    onDataImport={(data) => handleDataImport(data)}
-                    feature={feature}
                 />
 
 
@@ -186,9 +175,9 @@ export function DataTable<TData>({
                     </TableBody>
                 </Table>
 
-                <div className="mt-4 py-2 px-4 lg:px-6">
+                {feature?.pagination && (<div className="mt-4 py-2 px-4 lg:px-6">
                     <DataTablePagination table={table} />
-                </div>
+                </div>)}
             </div>
         </div >
     )

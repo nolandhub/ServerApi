@@ -2,8 +2,6 @@ import { Ticket } from "@/types/Firestore_Type";
 import { create } from "zustand";
 
 
-
-
 interface TicketStore {
     tickets: Ticket[]
     // editTicket: (ticket: Ticket) => void

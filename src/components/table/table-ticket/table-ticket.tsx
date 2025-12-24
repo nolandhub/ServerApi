@@ -15,9 +15,7 @@ export function TicketTable({ data, loading }: TicketTableProps) {
             loading={loading}
             feature={{
                 rangeDateSort: true,
-                importData: true,
-                exportData: true
-
+                pagination: true
             }}
         />
     )

@@ -56,7 +56,7 @@ export default function RootLayout({
             <NuqsAdapter>
               <ActiveThemeProvider>
                 {children}
-                <Toaster position="top-center" />
+                <Toaster position="top-right" />
                 <TailwindIndicator />
               </ActiveThemeProvider>
             </NuqsAdapter>

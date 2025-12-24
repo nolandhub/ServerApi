@@ -16,38 +16,26 @@ import { Dropzone, DropzoneContent, DropzoneEmptyState } from '../ui/shadcn-io/d
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger } from '../ui/dialog'
 import Papa from 'papaparse'
 import * as XLSX from 'xlsx';
-import axios from 'axios'
-import { DataTable } from './data-table'
 import { ColumnDef } from '@tanstack/react-table'
 
 
-
 interface DataTableToolbarProps<TData> {
-    columns: ColumnDef<TData>[]
     globalFilter: string
     onGlobalFilterChange: (value: string) => void
     onDateRangeUpdate?: (values: { range: DateRange; rangeCompare?: DateRange }) => void
-    onExportCSV: () => void
-    onExportExcel: () => void
-    onExportJSON: () => void
+    onExportCSV?: () => void
+    onExportExcel?: () => void
     onDataImport?: (data: any[]) => void
-    feature?: {
-        rangeDateSort?: boolean
-        exportData?: boolean
-        importData?: boolean
-    }
 }
 
+
 export function DataTableToolbar<TData>({
-    columns,
     globalFilter,
     onGlobalFilterChange,
     onDateRangeUpdate,
     onExportCSV,
     onExportExcel,
-    onExportJSON,
-    onDataImport,
-    feature
+    onDataImport
 }: DataTableToolbarProps<TData>) {
     const [files, setFiles] = useState<File[] | undefined>()
     const [data, setData] = useState<any[]>([])
@@ -116,96 +104,92 @@ export function DataTableToolbar<TData>({
             </div>
 
             {/* Date Range Filter */}
-            {feature?.rangeDateSort && onDateRangeUpdate && (
-                <div className='flex items-center gap-2 overflow-auto'>
-                    <CalendarCog />
-                    <DateRangePicker
-                        onUpdate={onDateRangeUpdate}
-                        align="start"
-                        locale="vi-VN"
-                        showCompare={false}
-                    />
-                </div>
-            )}
+
+            <div className='flex items-center gap-2 overflow-auto'>
+                <CalendarCog />
+                <DateRangePicker
+                    onUpdate={onDateRangeUpdate}
+                    align="start"
+                    locale="vi-VN"
+                    showCompare={false}
+                />
+            </div>
+
 
             <div className='flex flex-1 justify-end gap-2'>
                 {/* Import Data */}
-                {feature?.importData && (
-                    <Dialog>
-                        <DialogTrigger asChild>
-                            <Button variant="outline"><Upload />Import</Button>
-                        </DialogTrigger>
-                        <DialogContent >
-                            <div className='p-4'>
-                                {
-                                    data.length === 0
-                                        ? <Dropzone
-                                            onDrop={(file) => {
-                                                setFiles(file)
-                                                handleFileImport(file)
-                                            }}
-                                            onError={console.error}
-                                            src={files}
-                                        >
-                                            <DropzoneEmptyState />
-                                            <DropzoneContent />
-                                        </Dropzone>
-                                        : <DataTable data={data} columns={columns} />
-                                }
 
-                            </div>
+                <Dialog onOpenChange={(open) => {
+                    if (!open) {
+                        setData([])
+                        setFiles(undefined)
+                    }
+                }}>
+                    <DialogTrigger asChild>
+                        <Button variant="outline">
+                            <Upload />
+                            Upload file
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent >
+                        <div className='flex-1 overflow-auto p-4'>
+                            {
+                                data.length === 0 &&
+                                <Dropzone
+                                    onDrop={(file) => {
+                                        setFiles(file)
+                                        handleFileImport(file)
+                                    }}
+                                    onError={console.error}
+                                    src={files}
+                                >
+                                    <DropzoneEmptyState />
+                                    <DropzoneContent />
+                                </Dropzone>
+                            }
+                        </div>
 
+                        <DialogFooter className="sm:justify-end">
+                            <DialogClose asChild>
+                                <Button onClick={() => {
+                                    setData([])
+                                    setFiles(undefined)
+                                }} type="button" variant="secondary">
+                                    Close
+                                </Button>
+                            </DialogClose>
+                            <DialogTrigger>
+                                <Button onClick={() => onDataImport?.(data)} type="button" variant="default">
+                                    Import
+                                </Button>
+                            </DialogTrigger>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
 
-
-
-
-
-
-
-
-
-                            <DialogFooter className="sm:justify-end">
-                                <DialogClose asChild>
-                                    <Button type="button" variant="secondary">
-                                        Close
-                                    </Button>
-                                </DialogClose>
-                                <DialogTrigger>
-                                    <Button onClick={() => onDataImport?.(data)} type="button" variant="default">
-                                        Import
-                                    </Button>
-                                </DialogTrigger>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                )}
 
                 {/* Export Data */}
-                {feature?.exportData && (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant='outline'>
-                                <DownloadIcon className='mr-2' />
-                                Export
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align='end'>
-                            <DropdownMenuItem onClick={onExportCSV}>
-                                <FileTextIcon className='mr-2 size-4' />
-                                Export as CSV
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={onExportExcel}>
-                                <FileSpreadsheetIcon className='mr-2 size-4' />
-                                Export as Excel
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={onExportJSON}>
-                                <FileTextIcon className='mr-2 size-4' />
-                                Export as JSON
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                )}
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant='outline'>
+                            <DownloadIcon className='mr-2' />
+                            Export file
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end'>
+                        <DropdownMenuItem onClick={onExportCSV}>
+                            <FileTextIcon className='mr-2 size-4' />
+                            Export as CSV
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={onExportExcel}>
+                            <FileSpreadsheetIcon className='mr-2 size-4' />
+                            Export as Excel
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
             </div>
         </div>
     )

@@ -1,7 +1,7 @@
 "use client"
 import * as React from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getAllTicket } from "@/firebase/firestore/ticketFunc"
+import { getAllTicket, listenTickets } from "@/firebase/firestore/ticketFunc"
 import { getAllSaleConfigs } from "@/services/saleConfigs"
 import { TicketTable } from "../table/table-ticket/table-ticket"
 import { SaleConfigTable } from "../table/table-saleconfig/table-sale-config"
@@ -10,14 +10,15 @@ import { SaleConfigTable } from "../table/table-saleconfig/table-sale-config"
 export interface TableTabConfig<T> {
   key: string
   label: string
-  fetcher: () => Promise<T[]>
+  fetcher?: () => Promise<T[]>
+  listener?: (callBack: (data: T[]) => void) => () => void
 }
 
 export const TABLE_TABS: TableTabConfig<any>[] = [
   {
     key: "ticket",
     label: "Danh sách đặt vé",
-    fetcher: getAllTicket
+    listener: listenTickets
   },
   {
     key: "sale-config",
@@ -39,12 +40,28 @@ export function TableTabs() {
   React.useEffect(() => {
     if (!activeTab) return
 
-    setLoading(true)
+    let unsubscribe: (() => void) | undefined
 
-    activeTab.fetcher()
-      .then(setData)
-      .finally(() => setLoading(false))
+    // 🔥 realtime
+    if (activeTab.listener) {
+      setLoading(true)
+      unsubscribe = activeTab.listener((items) => {
+        setData(items)
+        setLoading(false)
+      })
+    }
+
+    // 🔥 fetch 1 lần
+    if (activeTab.fetcher) {
+      setLoading(true)
+      activeTab.fetcher()
+        .then(setData)
+        .finally(() => setLoading(false))
+    }
+
+    return () => unsubscribe?.()
   }, [activeTab])
+
 
   return (
     <Tabs value={activeKey} onValueChange={setActiveKey}>

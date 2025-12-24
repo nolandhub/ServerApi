@@ -21,7 +21,6 @@ export async function POST(req: Request) {
             }
         )
         return NextResponse.json(data, { status: 200 })
-
     } catch (err: unknown) {
         console.error("[refresh-token]", formatErr(err));
         return NextResponse.json(

@@ -36,6 +36,7 @@ export const useTripStore = create<TripStore>((set) => ({
     editTrip: null,
     openEditSheet: (trip) =>
         set({ openSheet: true, editTrip: trip ?? null }),
+
     closeEditSheet: () =>
         set({ openSheet: false, editTrip: null }),
 
@@ -44,9 +45,7 @@ export const useTripStore = create<TripStore>((set) => ({
             const exists = state.trips.some((t) => t.id === trip.id)
             return {
                 trips: exists
-                    ? state.trips.map((t) =>
-                        t.id === trip.id ? trip : t
-                    )
+                    ? state.trips.map((t) => t.id === trip.id ? trip : t)
                     : [trip, ...state.trips],
             }
         }),

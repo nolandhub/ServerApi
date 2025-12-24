@@ -1,16 +1,19 @@
+import { ExportColumn, mapExportData } from '@/types/exportColumn'
 import { Table } from '@tanstack/react-table'
 import Papa from 'papaparse'
 import * as XLSX from 'xlsx'
 
 export function useTableExport<TData>() {
-    const exportToCSV = (table: Table<TData>) => {
+    const exportToCSV = (table: Table<TData>, columns: ExportColumn<TData>[]) => {
         const BOM = '\ufeff'
         const selectedRows = table.getSelectedRowModel().rows
 
-        const dataToExport =
+        const rawData =
             selectedRows.length > 0
                 ? selectedRows.map(row => row.original)
                 : table.getFilteredRowModel().rows.map(row => row.original)
+
+        const dataToExport = mapExportData(rawData, columns)
 
         const csv = Papa.unparse(dataToExport, {
             header: true
@@ -21,20 +24,22 @@ export function useTableExport<TData>() {
         const url = URL.createObjectURL(blob)
 
         link.setAttribute('href', url)
-        link.setAttribute('download', `payments-export-${new Date().toISOString().split('T')[0]}.csv`)
+        link.setAttribute('download', `file-export-${new Date().toISOString().split('T')[0]}.csv`)
         link.style.visibility = 'hidden'
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
     }
 
-    const exportToExcel = (table: Table<TData>) => {
+    const exportToExcel = (table: Table<TData>, columns: ExportColumn<TData>[]) => {
         const selectedRows = table.getSelectedRowModel().rows
 
-        const dataToExport =
+        const rawData =
             selectedRows.length > 0
                 ? selectedRows.map(row => row.original)
                 : table.getFilteredRowModel().rows.map(row => row.original)
+
+        const dataToExport = mapExportData(rawData, columns)
 
         const worksheet = XLSX.utils.json_to_sheet(dataToExport)
         const workbook = XLSX.utils.book_new()
@@ -44,7 +49,7 @@ export function useTableExport<TData>() {
         const cols = [{ wch: 10 }, { wch: 20 }, { wch: 15 }, { wch: 25 }, { wch: 15 }]
         worksheet['!cols'] = cols
 
-        XLSX.writeFile(workbook, `payments-export-${new Date().toISOString().split('T')[0]}.xlsx`)
+        XLSX.writeFile(workbook, `file-export-${new Date().toISOString().split('T')[0]}.xlsx`)
     }
 
     const exportToJSON = (table: Table<TData>) => {
@@ -61,7 +66,7 @@ export function useTableExport<TData>() {
         const url = URL.createObjectURL(blob)
 
         link.setAttribute('href', url)
-        link.setAttribute('download', `payments-export-${new Date().toISOString().split('T')[0]}.json`)
+        link.setAttribute('download', `file-export-${new Date().toISOString().split('T')[0]}.json`)
         link.style.visibility = 'hidden'
         document.body.appendChild(link)
         link.click()

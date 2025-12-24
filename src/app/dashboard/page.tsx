@@ -17,7 +17,7 @@ export default function Page() {
                 <div className="p-6">
                     <TableTabs />
                 </div>
-                
+
 
                 <div className="px-4 lg:px-6">
                     <ChartAreaInteractive />

@@ -38,6 +38,8 @@ import { Option } from '@/types/Firestore_Type';
 import { mergeTicket } from '@/firebase/firestore/ticketFunc';
 import { Ticket } from '@/helper/ticketTableHelper';
 import { Calendar22 } from '../common/date-picker';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 
 const TICKET_STATUS = [
@@ -93,10 +95,34 @@ export function TicketQuickEditDrawer({ item }: { item: Ticket }) {
             status: formData.status,
         };
 
+        const zaloPayload = {
+            userId: formData.zaloId,                 // hoặc lấy từ ticket
+            customerName: formData.bookingName,
+            route: formData.routeName,
+            busName: formData.busName,
+            departDate: formData.bookingDate,         // string, không cần ISO
+            totalPassCount: formData.totalPassCount,
+            option: formData.option,                  // array Option
+            total: formData.total                     // number
+        }
+
+        if (payload.status === "confirmed") {
+            try {
+                await axios.post("/api/zalo-send-confirm", zaloPayload)
+            } catch (err) {
+                console.error("Zalo confirm failed", err)
+                // KHÔNG throw để tránh rollback nghiệp vụ
+            }
+        }
+
         await mergeTicket(formData.id, payload);
+
+
         setShowConfirm(false);
         setOpen(false);
-    };
+        toast.success("Cập nhật thành công")
+
+    }
 
     const handleChange = (field: string, value: any) => {
         setFormData(prev => ({ ...prev, [field]: value }));
