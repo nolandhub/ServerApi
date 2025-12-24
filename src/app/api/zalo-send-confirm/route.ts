@@ -3,7 +3,7 @@ import axios from "axios"
 import { buildZaloConfirm } from "@/helper/apiFuncHelper"
 import { withCors } from "@/utils/withCors"
 
-export async function handlerPost(req: Request) {
+async function handlerPost(req: Request) {
     try {
         const body = await req.json()
         console.log("ZALO CONFIRM BODY:", body)

@@ -1,27 +1,26 @@
-"use client"
-import z from "zod";
+import { z } from "zod";
 
-export const PriceDetail = z.object({
+export const PriceDetails = z.object({
     priceInstanceId: z.number(),
     seatTypeId: z.number(),
     label: z.string(),
-    adjustedPrice: z.number(), // 349000.00
-    basePrice: z.number()
-})
+    adjustedPrice: z.number(),
+    basePrice: z.number(),
+});
 
 export const PriceByTime = z.object({
-    time: z.string(), // "23:00"
-    detail: z.array(PriceDetail),
-})
+    time: z.string(),
+    detail: z.array(PriceDetails),
+});
 
 export const PriceRules = z.object({
     ruleId: z.number(),
     weekdays: z.number(),
     adjustType: z.enum(["amount", "percent"]),
-    value: z.number(), // 349000.00
+    value: z.number(),
     timeRangeEnd: z.string().nullable(),
-    timeRangeStart: z.string().nullable()
-})
+    timeRangeStart: z.string().nullable(),
+});
 
 export const Sale = z.object({
     saleId: z.number(),
@@ -33,9 +32,8 @@ export const Sale = z.object({
     timeRangeEnd: z.string().nullable(),
     timeRangeStart: z.string().nullable(),
     startDate: z.string().nullable(),
-    endDate: z.string().nullable()
-
-})
+    endDate: z.string().nullable(),
+});
 
 export const DetailScheduleSchema = z.object({
     stt: z.number(),
@@ -50,5 +48,5 @@ export const DetailScheduleSchema = z.object({
     priceDetails: z.array(PriceByTime),
     priceRules: z.array(PriceRules).nullable(),
     sales: Sale.nullable(),
-    isActive: z.number()
+    isActive: z.number(),
 });

@@ -15,7 +15,7 @@ export const renderPrice = (row: Row<z.infer<typeof DetailScheduleSchema>>) => (
         </TableHeader>
 
         <TableBody>
-            {row.original.priceDetail.map(price => (
+            {row.original.priceDetails.map(price => (
                 <TableRow key={price.time}>
                     {/* Giờ */}
                     <TableCell className="font-medium text-center">
@@ -31,7 +31,7 @@ export const renderPrice = (row: Row<z.infer<typeof DetailScheduleSchema>>) => (
                                     variant="secondary"
                                     className="px-3 py-1"
                                 >
-                                    {d.label}: {d.value.toLocaleString()}đ
+                                    {d.label}: {d.adjustedPrice.toLocaleString()}đ
                                 </Badge>
                             ))}
                         </div>

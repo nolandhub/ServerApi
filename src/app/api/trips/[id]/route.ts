@@ -2,14 +2,22 @@ import { pool } from "@/app/db";
 import { RowDataPacket } from "mysql2";
 import { NextResponse, NextRequest } from "next/server";
 
-export async function DELETE(
+type RouteContext = {
+    params: Promise<{
+        id: string;
+    }>;
+};
+
+async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    context: RouteContext
 ) {
     try {
+        const { id } = await context.params;
+
         await pool.execute<RowDataPacket[]>(
             `CALL proc_trip_delete(?)`,
-            [params.id]
+            [id]
         );
 
         return NextResponse.json({
@@ -19,6 +27,7 @@ export async function DELETE(
     } catch (error: unknown) {
         const message =
             error instanceof Error ? error.message : "Unknown error";
+
         return NextResponse.json(
             { error: message },
             { status: 500 }

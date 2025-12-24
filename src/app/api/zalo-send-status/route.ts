@@ -10,7 +10,9 @@ interface SendMessageBody {
     status: string
 }
 
-export async function handlerPost(req: Request) {
+
+export const POST = withCors(handlerPost);
+async function handlerPost(req: Request) {
     try {
         const body = (await req.json()) as SendMessageBody
         const { userId, customerName, route, status } = body
@@ -57,8 +59,6 @@ export async function handlerPost(req: Request) {
     }
 }
 
-
-export const POST = withCors(handlerPost);
 
 
 export const OPTIONS = withCors(() => new Response(null, { status: 200 }));
