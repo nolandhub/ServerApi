@@ -8,7 +8,8 @@ type RouteContext = {
     }>;
 };
 
-async function DELETE(
+
+export async function DELETE(
     request: NextRequest,
     context: RouteContext
 ) {
@@ -16,8 +17,7 @@ async function DELETE(
         const { id } = await context.params;
 
         await pool.execute<RowDataPacket[]>(
-            `CALL proc_trip_delete(?)`,
-            [id]
+            `CALL proc_trip_delete(?)`, [id]
         );
 
         return NextResponse.json({

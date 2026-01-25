@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 import { getTripsWithSales } from '@/services/tripServices';
 import { withCors } from "@/utils/withCors";
 
-
 async function handlerGet(request: Request) {
     const url = new URL(request.url);
     const routeCode = url.searchParams.get('routeCode');
@@ -21,9 +20,7 @@ async function handlerGet(request: Request) {
     }
 }
 
-
 export const GET = withCors(handlerGet);
-
 
 export const OPTIONS = withCors(() => new Response(null, { status: 200 }));
 
